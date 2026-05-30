@@ -21,31 +21,39 @@ app.get('/', (req, res) => {
 app.post('/curate-products', async (req, res) => {
     const userPreferences = req.body.userPreferences || req.body;
     let scrapedProducts = req.body.scrapedProducts || [];
+    // Use the real room analysis from P2 (Vision AI) when provided; fall back to
+    // the mock room so the endpoint still works standalone during development.
+    const roomProfile = req.body.roomProfile || req.body.roomAnalysis || mockRoom;
 
     try {
         if (!Array.isArray(scrapedProducts) || scrapedProducts.length === 0) {
             const maxItems = DEFAULT_MAX_ITEMS;
             const maxPages = DEFAULT_MAX_PAGES;
+            const ikeaMaxItems = 2;
 
             const [amazonProducts, ikeaProducts] = await Promise.all([
                 scrapeAmazonProducts(userPreferences, { maxItems, maxPages }),
-                scrapeIkeaProducts(userPreferences, { maxItems, maxPages }),
+                scrapeIkeaProducts(userPreferences, { maxItems: ikeaMaxItems, maxPages: 1 }),
             ]);
 
-            scrapedProducts = [...amazonProducts, ...ikeaProducts].slice(0, maxItems);
+            scrapedProducts = [
+                ...amazonProducts.slice(0, maxItems),
+                ...ikeaProducts.slice(0, ikeaMaxItems),
+            ];
         }
 
-        const aiResult = await curateProducts(userPreferences, mockRoom, scrapedProducts);
+        const aiResult = await curateProducts(userPreferences, roomProfile, scrapedProducts);
 
+        const totalBudget = userPreferences.budget || roomProfile.overallBudget;
         const budgetSummary = calculateBudget([
             aiResult.topPick,
             ...(aiResult.supportingPicks || []),
-        ].filter(Boolean), mockRoom.overallBudget);
+        ].filter(Boolean), totalBudget);
 
         res.json({
             status: 'success',
             inputReceived: req.body,
-            mockRoom,
+            roomProfile,
             scrapedProducts,
             result: {
                 ...aiResult,
