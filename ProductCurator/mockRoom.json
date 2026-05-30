@@ -1,0 +1,17 @@
+{
+  "roomType": "bedroom",
+  "existingFurniture": ["bed", "desk", "chair"],
+  "issues": ["room looks crowded", "empty corner", "poor lighting"],
+  "colorPalette": ["white", "beige", "brown"],
+  "styleInference": "minimalist",
+  "recommendedPlacement": {
+    "mirror": "right corner near window",
+    "plants": "beside mirror"
+  },
+  "userRequirement": "I want to rearrange my room to look spacious and have a corner with a big mirror and plants to get ready.",
+  "overallBudget": 200,
+  "categoryBudgets": {
+    "mirror": 70
+  },
+  "vibe": "cozy minimalist"
+}
