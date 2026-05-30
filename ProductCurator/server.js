@@ -4,6 +4,7 @@ const mockRoom = require('./mockRoom.json');
 const { calculateBudget } = require('./services/budgetService');
 const { curateProducts } = require('./services/claudeService');
 const { scrapeAmazonProducts, scrapeIkeaProducts } = require('./services/apifyService');
+const { generateRoomImage } = require('./services/roomgenService');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -11,6 +12,15 @@ const DEFAULT_MAX_ITEMS = Number(process.env.DEFAULT_MAX_ITEMS || 20);
 const DEFAULT_MAX_PAGES = Number(process.env.DEFAULT_MAX_PAGES || 2);
 
 app.use(express.json());
+
+// Allow the frontend (Vite dev server on :5173) to call this API from the browser.
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    if (req.method === 'OPTIONS') return res.sendStatus(204);
+    next();
+});
 
 app.get('/', (req, res) => {
     res.json({
@@ -44,11 +54,19 @@ app.post('/curate-products', async (req, res) => {
 
         const aiResult = await curateProducts(userPreferences, roomProfile, scrapedProducts);
 
+        const picks = [aiResult.topPick, ...(aiResult.supportingPicks || [])].filter(Boolean);
+
         const totalBudget = userPreferences.budget || roomProfile.overallBudget;
-        const budgetSummary = calculateBudget([
-            aiResult.topPick,
-            ...(aiResult.supportingPicks || []),
-        ].filter(Boolean), totalBudget);
+        const budgetSummary = calculateBudget(picks, totalBudget);
+
+        // Generate the "after" room image from the curated picks (P2/Bedrock,
+        // server-to-server). If it fails, still return the curation.
+        let generatedImage = null;
+        try {
+            generatedImage = await generateRoomImage(userPreferences, roomProfile, picks);
+        } catch (err) {
+            console.error('Room image generation failed:', err.message);
+        }
 
         res.json({
             status: 'success',
@@ -57,6 +75,7 @@ app.post('/curate-products', async (req, res) => {
             scrapedProducts,
             result: {
                 ...aiResult,
+                generatedImage,
                 totalCost: budgetSummary.totalCost,
                 remainingBudget: budgetSummary.remainingBudget,
                 isOverBudget: budgetSummary.isOverBudget,

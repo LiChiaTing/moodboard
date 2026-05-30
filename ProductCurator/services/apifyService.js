@@ -43,12 +43,34 @@ function buildAmazonSearchUrl(userPreferences = {}) {
   return `https://www.amazon.com/s?k=${encodeURIComponent(query)}`;
 }
 
+// Return the list of desired items the user picked. Each becomes its OWN search
+// so we get a relevant match per item instead of one mashed query.
+function getItemList(userPreferences = {}) {
+  const items = userPreferences.items;
+  if (Array.isArray(items) && items.length) return items;
+  if (typeof items === 'string' && items.trim()) {
+    return items.split(',').map((s) => s.trim()).filter(Boolean);
+  }
+  return ['home decor'];
+}
+
+// A focused per-item query: the item plus a light style + colour hint (only the
+// first of each, so the search stays relevant rather than diluted).
+function buildItemQuery(item, userPreferences = {}) {
+  const style = Array.isArray(userPreferences.style) ? userPreferences.style[0] : userPreferences.style;
+  const color = Array.isArray(userPreferences.colors) ? userPreferences.colors[0] : userPreferences.colors;
+  return [item, style, color].filter(Boolean).join(' ').trim();
+}
+
+function amazonSearchUrl(query) {
+  return `https://www.amazon.com/s?k=${encodeURIComponent(query)}`;
+}
+
 function buildIkeaInput(userPreferences = {}, pageNumber = 1, options = {}) {
   return {
-    searchKeyword: buildSearchQuery(userPreferences),
-    local: options.local || 'us-en',
-    pageNumber,
-    sortOrder: options.sortOrder || 'RELEVANCE',
+    keyword: buildSearchQuery(userPreferences),
+    local_code: options.localCode || 'us',
+    page: pageNumber,
   };
 }
 
@@ -117,33 +139,39 @@ async function callActor(actorId, input, maxItems = 20) {
 }
 
 async function scrapeAmazonProducts(userPreferences = {}, options = {}) {
-  const url = options.url || buildAmazonSearchUrl(userPreferences);
   const maxItems = Number(options.maxItems ?? 20);
-  const maxPages = Number(options.maxPages ?? 2);
+  const itemList = getItemList(userPreferences);
+  // How many products to pull per requested item (so results span all items).
+  const perItem = Number(options.perItem ?? Math.max(3, Math.ceil(maxItems / itemList.length)));
+
+  // One actor run, one search URL PER ITEM — relevant matches for each.
+  const categoryUrls = options.url
+    ? [{ url: options.url }]
+    : itemList.map((it) => ({ url: amazonSearchUrl(buildItemQuery(it, userPreferences)) }));
 
   const items = await callActor(ACTOR_ID_AMAZON, {
-    url,
-    maxItems,
-    maxPages,
+    categoryUrls,
+    maxItemsPerStartUrl: perItem,
+    maxSearchPagesPerStartUrl: 1,
   }, maxItems);
 
   return items.map(normalizeProduct).filter(Boolean);
 }
 
 async function scrapeIkeaProducts(userPreferences = {}, options = {}) {
-  const maxItems = Number(options.maxItems ?? 20);
-  const maxPages = Number(options.maxPages ?? 2);
-  const local = options.local || 'us-en';
-  const sortOrder = options.sortOrder || 'RELEVANCE';
-  const items = [];
+  const maxItems = Number(options.maxItems ?? 2);
+  const localCode = options.localCode || 'us';
+  // IKEA actor takes a single keyword, so search the user's top desired item.
+  const topItem = getItemList(userPreferences)[0];
+  const keyword = buildItemQuery(topItem, userPreferences);
 
-  for (let page = 1; page <= maxPages && items.length < maxItems; page += 1) {
-    const pageInput = buildIkeaInput(userPreferences, page, { local, sortOrder });
-    const pageItems = await callActor(ACTOR_ID_IKEA, pageInput, maxItems);
-    items.push(...pageItems);
-  }
+  const pageItems = await callActor(
+    ACTOR_ID_IKEA,
+    { keyword, local_code: localCode, page: 1 },
+    maxItems
+  );
 
-  return items
+  return pageItems
     .slice(0, maxItems)
     .map(normalizeIkeaProduct)
     .filter(Boolean);

@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useFlow } from '../context/FlowContext.jsx'
+import { buildPreferences, curate, mapPlan } from '../api.js'
 
 const STEPS = [
   { icon: '🔍', label: 'Reading your room', desc: 'Detecting colours, layout and existing furniture.' },
@@ -11,39 +12,63 @@ const STEPS = [
 const STEP_MS = 1100
 
 export default function Loading() {
-  const { current, goTo } = useFlow()
+  const flow = useFlow()
+  const { current, goTo, setPlan, setGeneratedImageUrl } = flow
   const [activeStep, setActiveStep] = useState(0)
+  const [error, setError] = useState(null)
+  const ranRef = useRef(false)
 
-  // Only run the sequence while this slide is on screen.
+  // Only run while this slide is on screen.
   useEffect(() => {
     if (current !== 3) {
       setActiveStep(0)
+      ranRef.current = false
       return
     }
+    if (ranRef.current) return // guard against re-entry
+    ranRef.current = true
+    setError(null)
 
-    // ── BACKEND HOOK ───────────────────────────────────────────────
-    // This is where you call the AI service. Replace the timed sequence
-    // below with your real request, e.g.:
-    //
-    //   const result = await generateRoom({ photos, budget, styles, ... })
-    //   setGeneratedImageUrl(result.imageUrl)
-    //   setPlan(result.products)
-    //   goTo(4)
-    //
-    // For now we simulate the steps so the flow is clickable.
+    // Advance the step animation up to the last step and hold there while
+    // the real (slower) backend call runs.
     let step = 0
     const tick = setInterval(() => {
-      step += 1
-      if (step < STEPS.length) {
-        setActiveStep(step)
-      } else {
-        clearInterval(tick)
-        goTo(4)
-      }
+      step = Math.min(step + 1, STEPS.length - 1)
+      setActiveStep(step)
     }, STEP_MS)
 
-    return () => clearInterval(tick)
-  }, [current, goTo])
+    let cancelled = false
+
+    // ── REAL BACKEND CALL: P3 curate → P2 generate ─────────────────
+    ;(async () => {
+      try {
+        const prefs = buildPreferences(flow)
+        // P3 now orchestrates scrape + curate + generate, returning the "after"
+        // image inline (data URL). One call, one origin — no browser->P2 hop.
+        const curated = await curate(prefs)
+        const result = curated.result || {}
+        const plan = mapPlan(result)
+
+        if (cancelled) return
+        if (plan.length) setPlan(plan)
+        if (result.generatedImage) setGeneratedImageUrl(result.generatedImage)
+      } catch (e) {
+        console.error('AI pipeline failed:', e)
+        if (!cancelled) setError(e.message || 'Something went wrong')
+      } finally {
+        if (!cancelled) {
+          clearInterval(tick)
+          goTo(4) // advance to Results either way
+        }
+      }
+    })()
+
+    return () => {
+      cancelled = true
+      clearInterval(tick)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current])
 
   return (
     <div className="slide s4">

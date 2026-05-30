@@ -155,7 +155,7 @@ export function FlowProvider({ children }) {
     styles, toggleStyle,
     colorMood, setColorMood,
     colors, toggleColor,
-    plan, swapProduct,
+    plan, setPlan, swapProduct,
     favorites, toggleFavorite,
     generatedImageUrl, setGeneratedImageUrl,
   }
