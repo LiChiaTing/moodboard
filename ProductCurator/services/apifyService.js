@@ -4,7 +4,7 @@ const apifyClient = new ApifyClient({
   token: process.env.APIFY_API_KEY,
 });
 
-const ACTOR_ID_AMAZON = process.env.APIFY_AMAZON_ACTOR_ID || 'jungleee/free-amazon-product-scraper';
+const ACTOR_ID_AMAZON = process.env.APIFY_AMAZON_ACTOR_ID || 'junglee/free-amazon-product-scraper';
 const ACTOR_ID_IKEA = process.env.APIFY_IKEA_ACTOR_ID || 'happyendpoint/ikea-scraper';
 
 function buildSearchQuery(userPreferences = {}) {
