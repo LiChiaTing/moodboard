@@ -13,3 +13,9 @@ node_modules/
 
 # Local-only backup of the standalone reroom-frontend repo (superseded by reroom-frontend/)
 reroom-frontend.local-backup/
+# root-level design exports / QA artifacts (keep local, not in team repo)
+/*.pdf
+/*.png
+/room[0-9].jpg
+reroom-frontend.local-backup/
+.specstory/
