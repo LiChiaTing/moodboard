@@ -3,6 +3,7 @@ import { useFlow } from '../context/FlowContext.jsx'
 import { activeVariant, buyUrl } from '../data/products.js'
 import { useToast } from '../components/Toast.jsx'
 import ProductThumb from '../components/ProductThumb.jsx'
+import BeforeAfter from '../components/BeforeAfter.jsx'
 
 export default function Results() {
   const {
@@ -14,7 +15,11 @@ export default function Results() {
   const [expanded, setExpanded] = useState(false)
   const [spinning, setSpinning] = useState(null)
 
-  const roomImage = generatedImageUrl || photos[0]?.url || null
+  // Before = the user's uploaded room (falls back to a demo photo so the
+  // comparison still works before anyone uploads). After = the AI-generated
+  // result (demo image until the backend returns a real one).
+  const beforeImage = photos[0]?.url || '/room-before.jpg'
+  const afterImage = generatedImageUrl || '/room-after.png'
 
   // Budget math from the live plan
   const spent = plan.reduce((sum, p) => {
@@ -43,34 +48,18 @@ export default function Results() {
       <div className="blob s5-blob-b" />
 
       <div className="s5-layout">
-        {/* LEFT — room photo */}
+        {/* LEFT — before/after room photo */}
         <div className="s5-photo-panel">
-          {roomImage ? (
-            <img className="s5-photo-img" src={roomImage} alt="Your room" />
-          ) : (
-            <div className="s5-room-scene">
-              <div className="s5-wall" />
-              <div className="s5-floor" />
-              <div className="s5-rug" />
-              <div className="s5-sofa">
-                <div className="s5-sofa-arm-l" />
-                <div className="s5-sofa-arm-r" />
+          <BeforeAfter before={beforeImage} after={afterImage}>
+            <div className="s5-photo-overlay">
+              <div
+                className="s5-cohesion-badge"
+                title="Cohesion score: how well these pieces work together as one look — colour harmony, style match and scale."
+              >
+                <span>91%</span> cohesion score ⓘ
               </div>
-              <div className="s5-plant" />
-              <div className="s5-lamp" />
-              <div className="s5-art">🖼</div>
             </div>
-          )}
-
-          <div className="s5-photo-overlay">
-            <div className="s5-transformed-badge">✦ Your room, transformed</div>
-            <div
-              className="s5-cohesion-badge"
-              title="Cohesion score: how well these pieces work together as one look — colour harmony, style match and scale."
-            >
-              <span>91%</span> cohesion score ⓘ
-            </div>
-          </div>
+          </BeforeAfter>
         </div>
 
         {/* RIGHT — products */}

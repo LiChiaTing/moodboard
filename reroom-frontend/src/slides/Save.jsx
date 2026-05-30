@@ -4,10 +4,12 @@ import { useToast } from '../components/Toast.jsx'
 import ProductThumb from '../components/ProductThumb.jsx'
 
 export default function Save() {
-  const { photos, generatedImageUrl, plan, styles, colorMood, favorites, goTo } = useFlow()
+  const { generatedImageUrl, plan, styles, colorMood, favorites, goTo } = useFlow()
   const toast = useToast()
 
-  const previewImage = generatedImageUrl || photos[0]?.url || null
+  // The room card shows the AI-generated "after" result (demo image until the
+  // backend returns a real one).
+  const previewImage = generatedImageUrl || '/room-after.png'
   const styleLabel = styles.join(' · ') || 'Your'
 
   // The pieces the user hearted on the Results page — their shopping list.
@@ -58,7 +60,6 @@ export default function Save() {
 
       <div className="s6-layout">
         <div className="s6-left">
-          <div className="s6-eyebrow"><span>🎉</span> Done!</div>
           <h2 className="s6-headline">Your room<br />plan is ready</h2>
           <p className="s6-sub">
             Save it, share it, or come back and shop from it whenever you're ready.
