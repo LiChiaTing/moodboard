@@ -12,7 +12,6 @@ export default function Hero() {
 
       <div className="s1-layout">
         <div className="s1-left">
-          <div className="s1-eyebrow">AI Room Transformer</div>
           <h1 className="s1-headline">
             Your pieces<br />don't talk to<br />each other.
           </h1>

@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useFlow, TOTAL_SLIDES } from './context/FlowContext.jsx'
 import { ToastProvider } from './components/Toast.jsx'
 import ProgressBar from './components/ProgressBar.jsx'
+import Logo from './components/Logo.jsx'
 import Hero from './slides/Hero.jsx'
 import Upload from './slides/Upload.jsx'
 import BudgetStyle from './slides/BudgetStyle.jsx'
@@ -28,6 +29,14 @@ export default function App() {
 
   return (
     <ToastProvider>
+      <button
+        className="app-logo-btn"
+        onClick={() => goTo(0)}
+        aria-label="Moodboard — back to start"
+      >
+        <Logo />
+      </button>
+
       <ProgressBar />
 
       <div className="slideshow">
