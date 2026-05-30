@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Logo Design — AI Room Transformer</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #F4F0EB;
+    color: #1C1C1C;
+    padding: 48px 40px 80px;
+    font-size: 13px;
+  }
+
+  /* ── Header ── */
+  .doc-header { margin-bottom: 52px; }
+  .doc-eyebrow {
+    font-size: 10px; font-weight: 600; letter-spacing: .12em;
+    text-transform: uppercase; color: #9A8878; margin-bottom: 10px;
+  }
+  .doc-title {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 36px; font-weight: 400; color: #1C1C1C;
+    line-height: 1.15; margin-bottom: 8px;
+  }
+  .doc-sub { font-size: 13px; color: #7A6E65; line-height: 1.6; max-width: 560px; }
+
+  /* ── Section ── */
+  .section { margin-bottom: 60px; }
+  .section-title {
+    font-size: 11px; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; color: #9A8878;
+    padding-bottom: 10px; border-bottom: 1px solid #E2DAD0;
+    margin-bottom: 28px;
+  }
+
+  /* ── Grid ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 14px; }
+
+  /* ── Logo Card ── */
+  .logo-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #E2DAD0;
+    overflow: hidden;
+  }
+  .logo-card-preview {
+    display: flex; align-items: center; justify-content: center;
+    padding: 48px 32px;
+    min-height: 180px;
+  }
+  .logo-card-preview.dark { background: #1a1a2e; }
+  .logo-card-preview.violet { background: #7b61ff; }
+  .logo-card-preview.warm { background: #FAF8F5; }
+  .logo-card-preview.earth { background: #C17A4A; }
+  .logo-card-meta {
+    padding: 14px 18px;
+    border-top: 1px solid #F0EBE3;
+    background: #FDFAF7;
+  }
+  .logo-card-name { font-size: 12px; font-weight: 600; color: #2C2C2C; margin-bottom: 2px; }
+  .logo-card-desc { font-size: 11px; color: #9A8878; }
+
+  /* ── Name chip ── */
+  .name-chip {
+    display: inline-block; background: #EDE9FE; color: #5B3FD4;
+    font-size: 10px; font-weight: 700; padding: 3px 9px;
+    border-radius: 20px; letter-spacing: .05em;
+    margin-bottom: 10px;
+  }
+
+  /* ── Color chips ── */
+  .color-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .color-chip {
+    display: flex; flex-direction: column;
+    align-items: flex-start; gap: 6px;
+    flex: 1; min-width: 80px;
+  }
+  .color-swatch {
+    width: 100%; height: 52px;
+    border-radius: 10px;
+    border: 1px solid rgba(0,0,0,.06);
+  }
+  .color-label { font-size: 10px; font-weight: 600; color: #5A5040; }
+  .color-hex { font-size: 10px; color: #9A8878; font-family: 'SF Mono', 'Fira Code', monospace; }
+
+  /* ── Type scale ── */
+  .type-row { display: flex; flex-direction: column; gap: 14px; }
+  .type-item { display: flex; align-items: baseline; gap: 20px; padding-bottom: 14px; border-bottom: 1px solid #F0EBE3; }
+  .type-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .type-label { font-size: 10px; color: #9A8878; width: 90px; flex-shrink: 0; font-weight: 600; }
+
+  /* ── Usage strip ── */
+  .usage-strip {
+    background: #1a1a2e; border-radius: 16px; overflow: hidden;
+    display: flex; align-items: center; gap: 0;
+    margin-bottom: 16px;
+  }
+  .usage-strip-item {
+    flex: 1; padding: 24px 20px;
+    display: flex; flex-direction: column; align-items: center; gap: 16px;
+    border-right: 1px solid rgba(255,255,255,.08);
+  }
+  .usage-strip-item:last-child { border-right: none; }
+  .usage-context { font-size: 10px; color: rgba(255,255,255,.4); text-align: center; margin-top: 4px; letter-spacing: .06em; text-transform: uppercase; }
+
+  /* ── Clearspace guide ── */
+  .clearspace-guide {
+    background: #fff; border-radius: 16px; border: 1px solid #E2DAD0;
+    padding: 40px; display: flex; align-items: center; justify-content: center;
+  }
+  .cs-inner {
+    position: relative; display: inline-flex; align-items: center; justify-content: center;
+  }
+  .cs-box {
+    position: absolute; inset: -20px;
+    border: 1.5px dashed #DDD6C8;
+  }
+  .cs-arrow-label {
+    position: absolute; font-size: 9px; color: #9A8878; font-weight: 600; letter-spacing: .04em;
+    white-space: nowrap;
+  }
+
+  /* ── Don'ts ── */
+  .dont-card {
+    background: #fff; border-radius: 14px; border: 1px solid #E2DAD0;
+    overflow: hidden;
+  }
+  .dont-preview {
+    padding: 36px 24px;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 130px; position: relative;
+  }
+  .dont-badge {
+    position: absolute; top: 10px; right: 10px;
+    background: #FEE2E2; color: #B91C1C;
+    font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 20px;
+    letter-spacing: .05em;
+  }
+  .dont-label { padding: 12px 16px; border-top: 1px solid #F0EBE3; background: #FDFAF7; font-size: 11px; color: #9A8878; }
+
+  /* ── SVG Logos ── */
+
+  /* MARK A — Room Frame with AI spark */
+  .logo-mark-a {
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  /* ── App bar preview ── */
+  .appbar-preview {
+    background: #1a1a2e; border-radius: 12px;
+    padding: 14px 20px; display: flex; align-items: center; gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  /* ── Favicon preview ── */
+  .favicon-row {
+    display: flex; gap: 10px; align-items: center;
+    padding: 14px 20px; background: #fff; border-radius: 10px;
+    border: 1px solid #E2DAD0;
+  }
+  .favicon-box {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+  }
+  .favicon-label { font-size: 9px; color: #9A8878; font-weight: 600; }
+
+  .info-card {
+    background: #fff; border-radius: 14px; border: 1px solid #E2DAD0;
+    padding: 20px 24px;
+  }
+  .info-card p { font-size: 12px; color: #5A5040; line-height: 1.7; }
+  .info-card strong { color: #2C2C2C; }
+
+  hr.divider { border: none; border-top: 1px solid #E2DAD0; margin: 0; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════ HEADER -->
+<div class="doc-header">
+  <div class="doc-eyebrow">Cascadia AI Hackathon 2026 · Logo Design Exploration</div>
+  <div class="doc-title">Brand Identity &amp; Logo</div>
+  <div class="doc-sub">Three logo directions for the AI Room Transformer product. Each concept works across app bar, favicon, onboarding, and export contexts.</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════ BRAND NAME OPTIONS -->
+<div class="section">
+  <div class="section-title">01 — Brand name options</div>
+  <div class="grid-4" style="margin-bottom:20px;">
+
+    <div class="info-card" style="border-color:#7b61ff; background:#F5F3FF;">
+      <div class="name-chip">Recommended</div>
+      <div style="font-family:'DM Serif Display',Georgia,serif; font-size:22px; color:#1C1C1C; margin-bottom:6px;">Reframe</div>
+      <p><strong>Why:</strong> Dual meaning — "reframe" a room physically + shift your perspective. Clean, memorable, app-nameable.</p>
+    </div>
+
+    <div class="info-card">
+      <div style="font-size:10px; font-weight:600; letter-spacing:.08em; color:#9A8878; margin-bottom:8px; text-transform:uppercase;">Option B</div>
+      <div style="font-family:'DM Serif Display',Georgia,serif; font-size:22px; color:#1C1C1C; margin-bottom:6px;">Homi</div>
+      <p><strong>Why:</strong> Home + AI. Warm, approachable, short. Feels consumer-first.</p>
+    </div>
+
+    <div class="info-card">
+      <div style="font-size:10px; font-weight:600; letter-spacing:.08em; color:#9A8878; margin-bottom:8px; text-transform:uppercase;">Option C</div>
+      <div style="font-family:'DM Serif Display',Georgia,serif; font-size:22px; color:#1C1C1C; margin-bottom:6px;">Palette</div>
+      <p><strong>Why:</strong> Evokes design + color curation. Strong visual connotation, easy to brand.</p>
+    </div>
+
+    <div class="info-card">
+      <div style="font-size:10px; font-weight:600; letter-spacing:.08em; color:#9A8878; margin-bottom:8px; text-transform:uppercase;">Option D</div>
+      <div style="font-family:'DM Serif Display',Georgia,serif; font-size:22px; color:#1C1C1C; margin-bottom:6px;">Stager</div>
+      <p><strong>Why:</strong> Direct, functional. "Stage" your room before buying. Professional ring.</p>
+    </div>
+
+  </div>
+  <div class="info-card" style="background:#FAF8F5;">
+    <p>All concepts below use <strong>"Reframe"</strong> as the working name. Swap easily — the mark stands on its own regardless of wordmark.</p>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════ CONCEPT A -->
+<div class="section">
+  <div class="section-title">02 — Concept A &nbsp;·&nbsp; The Room Frame</div>
+  <div class="grid-2" style="margin-bottom:16px;">
+
+    <!-- Light BG -->
+    <div class="logo-card">
+      <div class="logo-card-preview warm">
+        <!-- LOGO: Room frame mark + wordmark -->
+        <svg width="220" viewBox="0 0 220 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Mark: stylised room frame / door -->
+          <rect x="0" y="4" width="48" height="48" rx="10" fill="#7b61ff"/>
+          <!-- Inner room perspective lines -->
+          <rect x="8" y="12" width="32" height="28" rx="3" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+          <!-- Floor line -->
+          <line x1="8" y1="32" x2="40" y2="32" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+          <!-- AI spark / star in top-right of room -->
+          <circle cx="34" cy="18" r="5" fill="rgba(255,255,255,0.15)"/>
+          <path d="M34 14.5 L34.7 17.3 L37.5 18 L34.7 18.7 L34 21.5 L33.3 18.7 L30.5 18 L33.3 17.3 Z" fill="white"/>
+          <!-- Floor accent - two item silhouettes -->
+          <rect x="12" y="34" width="8" height="5" rx="1.5" fill="rgba(255,255,255,0.4)"/>
+          <rect x="23" y="33" width="12" height="6" rx="1.5" fill="rgba(255,255,255,0.25)"/>
+
+          <!-- Wordmark -->
+          <text x="60" y="27" font-family="DM Serif Display, Georgia, serif" font-size="22" fill="#1C1C1C" font-weight="400">Reframe</text>
+          <text x="60" y="43" font-family="DM Sans, system-ui, sans-serif" font-size="10" fill="#9A8878" font-weight="500" letter-spacing="0.08em">AI ROOM DESIGNER</text>
+        </svg>
+      </div>
+      <div class="logo-card-meta">
+        <div class="logo-card-name">Light — Primary</div>
+        <div class="logo-card-desc">On warm white / off-white backgrounds</div>
+      </div>
+    </div>
+
+    <!-- Dark BG -->
+    <div class="logo-card">
+      <div class="logo-card-preview dark">
+        <svg width="220" viewBox="0 0 220 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="4" width="48" height="48" rx="10" fill="#7b61ff"/>
+          <rect x="8" y="12" width="32" height="28" rx="3" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+          <line x1="8" y1="32" x2="40" y2="32" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+          <circle cx="34" cy="18" r="5" fill="rgba(255,255,255,0.15)"/>
+          <path d="M34 14.5 L34.7 17.3 L37.5 18 L34.7 18.7 L34 21.5 L33.3 18.7 L30.5 18 L33.3 17.3 Z" fill="white"/>
+          <rect x="12" y="34" width="8" height="5" rx="1.5" fill="rgba(255,255,255,0.4)"/>
+          <rect x="23" y="33" width="12" height="6" rx="1.5" fill="rgba(255,255,255,0.25)"/>
+          <text x="60" y="27" font-family="DM Serif Display, Georgia, serif" font-size="22" fill="white" font-weight="400">Reframe</text>
+          <text x="60" y="43" font-family="DM Sans, system-ui, sans-serif" font-size="10" fill="rgba(255,255,255,0.45)" font-weight="500" letter-spacing="0.08em">AI ROOM DESIGNER</text>
+        </svg>
+      </div>
+      <div class="logo-card-meta">
+        <div class="logo-card-name">Dark — Reversed</div>
+        <div class="logo-card-desc">On dark navy / dark backgrounds</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Mark only + sizes -->
+  <div class="grid-3" style="margin-bottom:16px;">
+
+    <div class="logo-card">
+      <div class="logo-card-preview warm" style="padding:32px; gap:24px; flex-direction:row; align-items:center; justify-content:space-around;">
+        <!-- Large -->
+        <svg width="64" height="64" viewBox="0 0 48 48" fill="none">
+          <rect width="48" height="48" rx="10" fill="#7b61ff"/>
+          <rect x="8" y="10" width="32" height="28" rx="3" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+          <line x1="8" y1="30" x2="40" y2="30" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          <path d="M34 14.5 L34.7 17.3 L37.5 18 L34.7 18.7 L34 21.5 L33.3 18.7 L30.5 18 L33.3 17.3 Z" fill="white"/>
+          <rect x="11" y="32" width="8" height="5" rx="1.5" fill="rgba(255,255,255,0.4)"/>
+          <rect x="22" y="31" width="12" height="6" rx="1.5" fill="rgba(255,255,255,0.25)"/>
+        </svg>
+        <!-- Medium -->
+        <svg width="40" height="40" viewBox="0 0 48 48" fill="none">
+          <rect width="48" height="48" rx="10" fill="#7b61ff"/>
+          <rect x="8" y="10" width="32" height="28" rx="3" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+          <line x1="8" y1="30" x2="40" y2="30" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          <path d="M34 14.5 L34.7 17.3 L37.5 18 L34.7 18.7 L34 21.5 L33.3 18.7 L30.5 18 L33.3 17.3 Z" fill="white"/>
+          <rect x="11" y="32" width="8" height="5" rx="1.5" fill="rgba(255,255,255,0.4)"/>
+          <rect x="22" y="31" width="12" height="6" rx="1.5" fill="rgba(255,255,255,0.25)"/>
+        </svg>
+        <!-- Small -->
+        <svg width="24" height="24" viewBox="0 0 48 48" fill="none">
+          <rect width="48" height="48" rx="10" fill="#7b61ff"/>
+          <rect x="8" y="10" width="32" height="28" rx="3" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+          <line x1="8" y1="30" x2="40" y2="30" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          <path d="M34 14.5 L34.7 17.3 L37.5 18 L34.7 18.7 L34 21.5 L33.3 18.7 L30.5 18 L33.3 17.3 Z" fill="white"/>
+        </svg>
+        <!-- XSmall -->
+        <svg width="16" height="16" viewBox="0 0 48 48" fill="none">
+          <rect width="48" height="48" rx="10" fill="#7b61ff"/>
+          <path d="M24 13 L24.9 16.6 L28.5 18 L24.9 19.4 L24 23 L23.1 19.4 L19.5 18 L23.1 16.6 Z" fill="white"/>
+        </svg>
+      </div>
+      <div class="logo-card-meta">
+        <div class="logo-card-name">Mark only — Size scale</div>
+        <div class="logo-card-desc">64px · 40px · 24px · 16px (favicon)</div>
+      </div>
+    </div>
+
+    <!-- Violet BG -->
+    <div class="logo-card">
+      <div class="logo-card-preview violet">
+        <svg width="160" viewBox="0 0 160 56" fill="none">
+          <rect x="0" y="4" width="48" height="48" rx="10" fill="rgba(255,255,255,0.18)"/>
+          <rect x="8" y="12" width="32" height="28" rx="3" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+          <line x1="8" y1="32" x2="40" y2="32" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+          <path d="M34 14.5 L34.7 17.3 L37.5 18 L34.7 18.7 L34 21.5 L33.3 18.7 L30.5 18 L33.3 17.3 Z" fill="white"/>
+          <rect x="12" y="34" width="8" height="5" rx="1.5" fill="rgba(255,255,255,0.5)"/>
+          <rect x="23" y="33" width="12" height="6" rx="1.5" fill="rgba(255,255,255,0.3)"/>
+          <text x="60" y="27" font-family="DM Serif Display, Georgia, serif" font-size="20" fill="white" font-weight="400">Reframe</text>
+          <text x="60" y="42" font-family="DM Sans, system-ui, sans-serif" font-size="9" fill="rgba(255,255,255,0.6)" font-weight="500" letter-spacing="0.08em">AI ROOM DESIGNER</text>
+        </svg>
+      </div>
+      <div class="logo-card-meta">
+        <div class="logo-card-name">Violet — Brand background</div>
+        <div class="logo-card-desc">On violet / CTA surfaces</div>
+      </div>
+    </div>
+
+    <!-- Stacked variant -->
+    <div class="logo-card">
+      <div class="logo-card-preview warm" style="flex-direction:column; gap:10px;">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+          <rect width="48" height="48" rx="10" fill="#7b61ff"/>
+          <rect x="8" y="10" width="32" height="28" rx="3" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+          <line x1="8" y1="30" x2="40" y2="30" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          <path d="M34 14.5 L34.7 17.3 L37.5 18 L34.7 18.7 L34 21.5 L33.3 18.7 L30.5 18 L33.3 17.3 Z" fill="white"/>
+          <rect x="11" y="32" width="8" height="5" rx="1.5" fill="rgba(255,255,255,0.4)"/>
+          <rect x="22" y="31" width="12" height="6" rx="1.5" fill="rgba(255,255,255,0.25)"/>
+        </svg>
+        <svg width="100" viewBox="0 0 100 22" fill="none">
+          <text x="50" y="16" font-family="DM Serif Display, Georgia, serif" font-size="18" fill="#1C1C1C" font-weight="400" text-anchor="middle">Reframe</text>
+        </svg>
+      </div>
+      <div class="logo-card-meta">
+        <div class="logo-card-name">Stacked — Vertical</div>
+        <div class="logo-card-desc">For square/vertical contexts</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════ CONCEPT B -->
+<div class="section">
+  <div class="section-title">03 — Concept B &nbsp;·&nbsp; The Spark Lens</div>
+  <div class="grid-2" style="margin-bottom:16px;">
+
+    <div class="logo-card">
+      <div class="logo-card-preview warm">
+        <svg width="230" viewBox="0 0 230 60" fill="none">
+          <!-- Mark: circle lens with AI spark center -->
+          <circle cx="30" cy="30" r="26" fill="#7b61ff"/>
+          <!-- Outer ring accent -->
+          <circle cx="30" cy="30" r="20" stroke="rgba(255,255,255,0.25)" stroke-width="1" fill="none"/>
+          <!-- Crosshair / focus lines -->
+          <line x1="30" y1="12" x2="30" y2="18" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="30" y1="42" x2="30" y2="48" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="12" y1="30" x2="18" y2="30" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="42" y1="30" x2="48" y2="30" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- Central 4-point star -->
+          <path d="M30 22 L31.2 28.8 L38 30 L31.2 31.2 L30 38 L28.8 31.2 L22 30 L28.8 28.8 Z" fill="white"/>
+          <!-- Small corner sparks -->
+          <circle cx="40" cy="20" r="1.5" fill="rgba(255,255,255,0.7)"/>
+          <circle cx="20" cy="40" r="1" fill="rgba(255,255,255,0.5)"/>
+
+          <!-- Wordmark -->
+          <text x="68" y="28" font-family="DM Serif Display, Georgia, serif" font-size="22" fill="#1C1C1C" font-weight="400">Reframe</text>
+          <text x="68" y="44" font-family="DM Sans, system-ui, sans-serif" font-size="10" fill="#9A8878" font-weight="500" letter-spacing="0.08em">AI ROOM DESIGNER</text>
+        </svg>
+      </div>
+      <div class="logo-card-meta">
+        <div class="logo-card-name">Light — Spark Lens</div>
+        <div class="logo-card-desc">Circular mark, AI vision concept</div>
+      </div>
+    </div>
+
+    <div class="logo-card">
+      <div class="logo-card-preview dark">
+        <svg width="230" viewBox="0 0 230 60" fill="none">
+          <circle cx="30" cy="30" r="26" fill="#7b61ff"/>
+          <circle cx="30" cy="30" r="20" stroke="rgba(255,255,255,0.25)" stroke-width="1" fill="none"/>
+          <line x1="30" y1="12" x2="30" y2="18" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="30" y1="42" x2="30" y2="48" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="12" y1="30" x2="18" y2="30" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="42" y1="30" x2="48" y2="30" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M30 22 L31.2 28.8 L38 30 L31.2 31.2 L30 38 L28.8 31.2 L22 30 L28.8 28.8 Z" fill="white"/>
+          <circle cx="40" cy="20" r="1.5" fill="rgba(255,255,255,0.7)"/>
+          <circle cx="20" cy="40" r="1" fill="rgba(255,255,255,0.5)"/>
+          <text x="68" y="28" font-family="DM Serif Display, Georgia, serif" font-size="22" fill="white" font-weight="400">Reframe</text>
+          <text x="68" y="44" font-family="DM Sans, system-ui, sans-serif" font-size="10" fill="rgba(255,255,255,0.45)" font-weight="500" letter-spacing="0.08em">AI ROOM DESIGNER</text>
+        </svg>
+      </div>
+      <div class="logo-card-meta">
+        <div class="logo-card-name">Dark — Spark Lens</div>
+        <div class="logo-card-desc">On dark surfaces</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════ CONCEPT C -->
+<div class="section">
+  <div class="section-title">04 — Concept C &nbsp;·&nbsp; The Corner</div>
+  <div class="grid-2" style="margin-bottom:16px;">
+
+    <div class="logo-card">
+      <div class="logo-card-preview warm">
+        <svg width="240" viewBox="0 0 240 60" fill="none">
+          <!-- Mark: geometric corner/perspective = interior corner of a room -->
+          <rect x="0" y="4" width="52" height="52" rx="11" fill="#1a1a2e"/>
+          <!-- Room corner - two walls meeting -->
+          <line x1="26" y1="10" x2="26" y2="48" stroke="#7b61ff" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="26" y1="48" x2="46" y2="38" stroke="#7b61ff" stroke-width="2" stroke-linecap="round" stroke-opacity="0.7"/>
+          <line x1="26" y1="48" x2="8" y2="38" stroke="#7b61ff" stroke-width="2" stroke-linecap="round" stroke-opacity="0.7"/>
+          <!-- Left wall fill -->
+          <polygon points="8,14 26,10 26,48 8,38" fill="rgba(123,97,255,0.12)"/>
+          <!-- Right wall fill -->
+          <polygon points="46,14 26,10 26,48 46,38" fill="rgba(123,97,255,0.06)"/>
+          <!-- Ceiling -->
+          <line x1="8" y1="14" x2="26" y2="10" stroke="rgba(123,97,255,0.4)" stroke-width="1" stroke-linecap="round"/>
+          <line x1="46" y1="14" x2="26" y2="10" stroke="rgba(123,97,255,0.4)" stroke-width="1" stroke-linecap="round"/>
+          <!-- AI spark -->
+          <path d="M37 19 L37.5 21.5 L40 22 L37.5 22.5 L37 25 L36.5 22.5 L34 22 L36.5 21.5 Z" fill="#7b61ff"/>
+
+          <!-- Wordmark -->
+          <text x="66" y="29" font-family="DM Serif Display, Georgia, serif" font-size="23" fill="#1C1C1C" font-weight="400">Reframe</text>
+          <text x="66" y="45" font-family="DM Sans, system-ui, sans-serif" font-size="10" fill="#9A8878" font-weight="500" letter-spacing="0.08em">AI ROOM DESIGNER</text>
+        </svg>
+      </div>
+      <div class="logo-card-meta">
+        <div class="logo-card-name">Light — The Corner</div>
+        <div class="logo-card-desc">Perspective room corner, dark mark on light</div>
+      </div>
+    </div>
+
+    <div class="logo-card">
+      <div class="logo-card-preview earth">
+        <svg width="240" viewBox="0 0 240 60" fill="none">
+          <rect x="0" y="4" width="52" height="52" rx="11" fill="rgba(255,255,255,0.15)"/>
+          <line x1="26" y1="10" x2="26" y2="48" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="26" y1="48" x2="46" y2="38" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round"/>
+          <line x1="26" y1="48" x2="8" y2="38" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round"/>
+          <polygon points="8,14 26,10 26,48 8,38" fill="rgba(255,255,255,0.1)"/>
+          <polygon points="46,14 26,10 26,48 46,38" fill="rgba(255,255,255,0.05)"/>
+          <line x1="8" y1="14" x2="26" y2="10" stroke="rgba(255,255,255,0.4)" stroke-width="1" stroke-linecap="round"/>
+          <line x1="46" y1="14" x2="26" y2="10" stroke="rgba(255,255,255,0.4)" stroke-width="1" stroke-linecap="round"/>
+          <path d="M37 19 L37.5 21.5 L40 22 L37.5 22.5 L37 25 L36.5 22.5 L34 22 L36.5 21.5 Z" fill="white"/>
+          <text x="66" y="29" font-family="DM Serif Display, Georgia, serif" font-size="23" fill="white" font-weight="400">Reframe</text>
+          <text x="66" y="45" font-family="DM Sans, system-ui, sans-serif" font-size="10" fill="rgba(255,255,255,0.6)" font-weight="500" letter-spacing="0.08em">AI ROOM DESIGNER</text>
+        </svg>
+      </div>
+      <div class="logo-card-meta">
+        <div class="logo-card-name">Terracotta — Warm accent</div>
+        <div class="logo-card-desc">Secondary brand colour surface</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════ COLOR SYSTEM -->
+<div class="section">
+  <div class="section-title">05 — Color system</div>
+  <div class="color-row" style="margin-bottom:16px;">
+    <div class="color-chip">
+      <div class="color-swatch" style="background:#7b61ff;"></div>
+      <div class="color-label">Violet — Primary</div>
+      <div class="color-hex">#7B61FF</div>
+    </div>
+    <div class="color-chip">
+      <div class="color-swatch" style="background:#5B3FD4;"></div>
+      <div class="color-label">Violet Dark</div>
+      <div class="color-hex">#5B3FD4</div>
+    </div>
+    <div class="color-chip">
+      <div class="color-swatch" style="background:#EDE9FE;"></div>
+      <div class="color-label">Violet Tint</div>
+      <div class="color-hex">#EDE9FE</div>
+    </div>
+    <div class="color-chip">
+      <div class="color-swatch" style="background:#1a1a2e;"></div>
+      <div class="color-label">Midnight</div>
+      <div class="color-hex">#1A1A2E</div>
+    </div>
+    <div class="color-chip">
+      <div class="color-swatch" style="background:#C17A4A;"></div>
+      <div class="color-label">Terracotta</div>
+      <div class="color-hex">#C17A4A</div>
+    </div>
+    <div class="color-chip">
+      <div class="color-swatch" style="background:#3D7A6A;"></div>
+      <div class="color-label">Sage</div>
+      <div class="color-hex">#3D7A6A</div>
+    </div>
+    <div class="color-chip">
+      <div class="color-swatch" style="background:#FAF8F5;"></div>
+      <div class="color-label">Warm White</div>
+      <div class="color-hex">#FAF8F5</div>
+    </div>
+    <div class="color-chip">
+      <div class="color-swatch" style="background:#2C2C2C;"></div>
+      <div class="color-label">Ink</div>
+      <div class="color-hex">#2C2C2C</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════ IN-APP USAGE -->
+<div class="section">
+  <div class="section-title">06 — In-app usage</div>
+
+  <!-- App bars -->
+  <div style="margin-bottom:20px;">
+    <div style="font-size:11px; font-weight:600; color:#7A6E65; margin-bottom:10px;">App bar (Step 1 — Upload)</div>
+    <div class="appbar-preview">
+      <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
+        <rect width="48" height="48" rx="10" fill="#7b61ff"/>
+        <rect x="8" y="10" width="32" height="28" rx="3" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+        <line x1="8" y1="30" x2="40" y2="30" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+        <path d="M34 14.5 L34.7 17.3 L37.5 18 L34.7 18.7 L34 21.5 L33.3 18.7 L30.5 18 L33.3 17.3 Z" fill="white"/>
+        <rect x="11" y="32" width="8" height="5" rx="1.5" fill="rgba(255,255,255,0.4)"/>
+        <rect x="22" y="31" width="12" height="6" rx="1.5" fill="rgba(255,255,255,0.25)"/>
+      </svg>
+      <div>
+        <div style="color:white; font-size:15px; font-family:'DM Serif Display',Georgia,serif; line-height:1.2;">Reframe</div>
+        <div style="color:rgba(255,255,255,0.45); font-size:10px; margin-top:1px;">Upload your room photo to get started</div>
+      </div>
+      <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+        <div style="background:rgba(255,255,255,.12); border-radius:8px; padding:6px 14px; color:white; font-size:11px; font-weight:600;">Step 1 / 6</div>
+      </div>
+    </div>
+
+    <div class="appbar-preview" style="background:#2a2a42;">
+      <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
+        <rect width="48" height="48" rx="10" fill="#7b61ff"/>
+        <rect x="8" y="10" width="32" height="28" rx="3" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+        <line x1="8" y1="30" x2="40" y2="30" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+        <path d="M34 14.5 L34.7 17.3 L37.5 18 L34.7 18.7 L34 21.5 L33.3 18.7 L30.5 18 L33.3 17.3 Z" fill="white"/>
+        <rect x="11" y="32" width="8" height="5" rx="1.5" fill="rgba(255,255,255,0.4)"/>
+        <rect x="22" y="31" width="12" height="6" rx="1.5" fill="rgba(255,255,255,0.25)"/>
+      </svg>
+      <div>
+        <div style="color:white; font-size:15px; font-family:'DM Serif Display',Georgia,serif; line-height:1.2;">Reframe</div>
+        <div style="color:rgba(255,255,255,0.45); font-size:10px; margin-top:1px;">Style tiles — pick what feels right</div>
+      </div>
+      <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+        <div style="background:rgba(255,255,255,.12); border-radius:8px; padding:6px 14px; color:white; font-size:11px; font-weight:600;">Step 3 / 6</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Favicon / icon sizes -->
+  <div style="font-size:11px; font-weight:600; color:#7A6E65; margin-bottom:10px;">Favicon &amp; icon sizes</div>
+  <div class="favicon-row">
+    <div class="favicon-box">
+      <svg width="64" height="64" viewBox="0 0 48 48" fill="none">
+        <rect width="48" height="48" rx="10" fill="#7b61ff"/>
+        <rect x="8" y="10" width="32" height="28" rx="3" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+        <line x1="8" y1="30" x2="40" y2="30" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+        <path d="M34 14.5 L34.7 17.3 L37.5 18 L34.7 18.7 L34 21.5 L33.3 18.7 L30.5 18 L33.3 17.3 Z" fill="white"/>
+        <rect x="11" y="32" width="8" height="5" rx="1.5" fill="rgba(255,255,255,0.4)"/>
+        <rect x="22" y="31" width="12" height="6" rx="1.5" fill="rgba(255,255,255,0.25)"/>
+      </svg>
+      <div class="favicon-label">64px</div>
+    </div>
+    <div class="favicon-box">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+        <rect width="48" height="48" rx="10" fill="#7b61ff"/>
+        <rect x="8" y="10" width="32" height="28" rx="3" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+        <line x1="8" y1="30" x2="40" y2="30" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+        <path d="M34 14.5 L34.7 17.3 L37.5 18 L34.7 18.7 L34 21.5 L33.3 18.7 L30.5 18 L33.3 17.3 Z" fill="white"/>
+        <rect x="11" y="32" width="8" height="5" rx="1.5" fill="rgba(255,255,255,0.4)"/>
+        <rect x="22" y="31" width="12" height="6" rx="1.5" fill="rgba(255,255,255,0.25)"/>
+      </svg>
+      <div class="favicon-label">48px</div>
+    </div>
+    <div class="favicon-box">
+      <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
+        <rect width="48" height="48" rx="10" fill="#7b61ff"/>
+        <rect x="8" y="10" width="32" height="28" rx="3" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+        <line x1="8" y1="30" x2="40" y2="30" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+        <path d="M34 14.5 L34.7 17.3 L37.5 18 L34.7 18.7 L34 21.5 L33.3 18.7 L30.5 18 L33.3 17.3 Z" fill="white"/>
+        <rect x="11" y="32" width="8" height="5" rx="1.5" fill="rgba(255,255,255,0.4)"/>
+        <rect x="22" y="31" width="12" height="6" rx="1.5" fill="rgba(255,255,255,0.25)"/>
+      </svg>
+      <div class="favicon-label">32px</div>
+    </div>
+    <div class="favicon-box">
+      <svg width="24" height="24" viewBox="0 0 48 48" fill="none">
+        <rect width="48" height="48" rx="10" fill="#7b61ff"/>
+        <rect x="8" y="10" width="32" height="28" rx="3" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+        <line x1="8" y1="30" x2="40" y2="30" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+        <path d="M34 14.5 L34.7 17.3 L37.5 18 L34.7 18.7 L34 21.5 L33.3 18.7 L30.5 18 L33.3 17.3 Z" fill="white"/>
+      </svg>
+      <div class="favicon-label">24px</div>
+    </div>
+    <div class="favicon-box">
+      <svg width="16" height="16" viewBox="0 0 48 48" fill="none">
+        <rect width="48" height="48" rx="10" fill="#7b61ff"/>
+        <path d="M24 14 L24.8 17.2 L28 18 L24.8 18.8 L24 22 L23.2 18.8 L20 18 L23.2 17.2 Z" fill="white"/>
+      </svg>
+      <div class="favicon-label">16px</div>
+    </div>
+    <div style="margin-left:auto; padding:0 8px;">
+      <p style="font-size:11px; color:#9A8878; line-height:1.6; max-width:240px;">At 16–24px the room detail disappears — the icon simplifies to just the star/spark mark on the violet square. Works cleanly as a browser favicon.</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════ TYPOGRAPHY -->
+<div class="section">
+  <div class="section-title">07 — Typography pairing</div>
+  <div class="logo-card" style="padding:28px;">
+    <div class="type-row">
+      <div class="type-item">
+        <div class="type-label">Logo / Hero</div>
+        <div style="font-family:'DM Serif Display',Georgia,serif; font-size:32px; font-weight:400; color:#1C1C1C; line-height:1.1;">Reframe your space</div>
+      </div>
+      <div class="type-item">
+        <div class="type-label">H1 / Section</div>
+        <div style="font-family:'DM Serif Display',Georgia,serif; font-size:22px; font-weight:400; color:#1C1C1C; line-height:1.2;">Upload a photo. Pick a style.</div>
+      </div>
+      <div class="type-item">
+        <div class="type-label">Body / UI</div>
+        <div style="font-family:'DM Sans',system-ui,sans-serif; font-size:14px; font-weight:400; color:#5A5040; line-height:1.6;">AI searches the web in real time for products that match your style, palette, and budget — not a fixed database. You see them placed in your actual room before you buy.</div>
+      </div>
+      <div class="type-item">
+        <div class="type-label">Label / Cap</div>
+        <div style="font-family:'DM Sans',system-ui,sans-serif; font-size:10px; font-weight:700; color:#9A8878; letter-spacing:.1em; text-transform:uppercase;">AI ROOM DESIGNER · STEP 3 OF 6</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════ DO / DON'T -->
+<div class="section">
+  <div class="section-title">08 — Logo do's &amp; don'ts</div>
+  <div class="grid-3">
+
+    <div class="dont-card">
+      <div class="dont-preview" style="background:#FAF8F5;">
+        <div class="dont-badge">❌ DON'T</div>
+        <svg width="180" viewBox="0 0 180 56" fill="none">
+          <!-- stretched logo -->
+          <rect x="0" y="4" width="48" height="48" rx="10" fill="#7b61ff" transform="scale(1.5, 0.8) translate(0, 5)"/>
+          <rect x="8" y="9" width="32" height="28" rx="3" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" transform="scale(1.5, 0.8) translate(0, 5)"/>
+        </svg>
+      </div>
+      <div class="dont-label">Don't stretch or distort the mark</div>
+    </div>
+
+    <div class="dont-card">
+      <div class="dont-preview" style="background:#FAF8F5;">
+        <div class="dont-badge">❌ DON'T</div>
+        <svg width="190" viewBox="0 0 190 56" fill="none">
+          <rect x="0" y="4" width="48" height="48" rx="10" fill="#C17A4A"/>
+          <rect x="8" y="10" width="32" height="28" rx="3" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+          <path d="M34 14.5 L34.7 17.3 L37.5 18 L34.7 18.7 L34 21.5 L33.3 18.7 L30.5 18 L33.3 17.3 Z" fill="white"/>
+          <rect x="11" y="32" width="8" height="5" rx="1.5" fill="rgba(255,255,255,0.4)"/>
+          <text x="60" y="27" font-family="DM Serif Display, Georgia, serif" font-size="22" fill="#C17A4A">Reframe</text>
+          <text x="60" y="43" font-family="DM Sans, system-ui, sans-serif" font-size="10" fill="#9A8878" letter-spacing="0.08em">AI ROOM DESIGNER</text>
+        </svg>
+      </div>
+      <div class="dont-label">Don't recolour mark to terracotta — violet only</div>
+    </div>
+
+    <div class="dont-card">
+      <div class="dont-preview" style="background:#7b61ff;">
+        <div class="dont-badge">❌ DON'T</div>
+        <svg width="190" viewBox="0 0 190 56" fill="none">
+          <rect x="0" y="4" width="48" height="48" rx="10" fill="#1C1C1C"/>
+          <rect x="8" y="10" width="32" height="28" rx="3" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+          <path d="M34 14.5 L34.7 17.3 L37.5 18 L34.7 18.7 L34 21.5 L33.3 18.7 L30.5 18 L33.3 17.3 Z" fill="white"/>
+          <text x="60" y="27" font-family="DM Serif Display, Georgia, serif" font-size="22" fill="#1C1C1C">Reframe</text>
+          <text x="60" y="43" font-family="DM Sans, system-ui, sans-serif" font-size="10" fill="rgba(0,0,0,0.5)" letter-spacing="0.08em">AI ROOM DESIGNER</text>
+        </svg>
+      </div>
+      <div class="dont-label">Don't use dark wordmark on violet background</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ FOOTER -->
+<div style="text-align:center; padding-top:20px; border-top:1px solid #E2DAD0;">
+  <div style="font-size:11px; color:#9A8878;">Cascadia AI Hackathon 2026 &nbsp;·&nbsp; UI / Design by Dianne Ting &nbsp;·&nbsp; Brand exploration v1.0</div>
+</div>
+
+</body>
+</html>

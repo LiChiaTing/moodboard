@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moodboard — UX Refinement Spec (v0.6 direction)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: #FAF8F5; color: #2C2C2C; font-size: 13px; padding: 32px; line-height: 1.55; }
+
+  h1 { font-family: Georgia, serif; font-size: 28px; font-weight: normal; margin-bottom: 6px; }
+  .meta { font-size: 12px; color: #9A8E80; margin-bottom: 28px; }
+
+  .section { margin-bottom: 44px; }
+  .section-title { font-size: 18px; font-family: Georgia, serif; font-weight: normal; margin-bottom: 6px; padding-bottom: 8px; border-bottom: 1.5px solid #E8E0D4; }
+  .section-intro { font-size: 12px; color: #8A7E70; margin: 10px 0 18px; line-height: 1.6; }
+
+  .card { border: 1px solid #E8E0D4; border-radius: 12px; padding: 16px 18px; background: #fff; }
+
+  /* chips */
+  .chip { display: inline-flex; align-items:center; gap:4px; padding: 2px 9px; border-radius: 20px; font-size: 10.5px; font-weight: 600; margin: 1px 2px; white-space: nowrap; }
+  .c-new   { background: #E6EEF6; color: #2A5A8A; }
+  .c-keep  { background: #ECE7F5; color: #6A56A8; }
+  .c-must  { background: #FDE8E0; color: #C04A2A; }
+  .c-high  { background: #FBEBD6; color: #9A5A1A; }
+  .c-nice  { background: #ECECEC; color: #777; }
+  .c-alex  { background: #EDE8F5; color: #5A4A9A; }
+  .c-jordan{ background: #FEF0E6; color: #9A5A1A; }
+  .c-maya  { background: #E6F4EC; color: #2A7A44; }
+  .c-prin  { background: #E6F0E8; color: #3A7A44; }
+  .c-dec   { background: #2C2C2C; color: #fff; }
+
+  .legend { display:flex; flex-wrap:wrap; gap:6px 4px; margin-bottom: 8px; }
+  .legend .lbl { font-size:10px; color:#A89880; text-transform:uppercase; letter-spacing:.06em; align-self:center; margin-right:4px; }
+
+  /* flow strip */
+  .flow { display:flex; gap:8px; flex-wrap:wrap; margin-bottom: 4px; }
+  .flow-step { flex:1; min-width: 150px; border:1px solid #E8E0D4; border-radius:10px; padding:12px 14px; background:#fff; position:relative; }
+  .flow-step.is-new { border-color:#A9C4E0; background:#F7FAFD; }
+  .flow-num { font-size:10px; font-weight:700; color:#A89880; letter-spacing:.06em; text-transform:uppercase; }
+  .flow-name { font-size:13px; font-weight:700; margin:3px 0 4px; }
+  .flow-desc { font-size:11px; color:#7A7A7A; line-height:1.5; }
+  .flow-arrow { align-self:center; color:#C8BCA8; font-size:16px; }
+
+  /* refinement block */
+  .screen { margin-bottom: 22px; }
+  .screen-head { display:flex; align-items:baseline; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+  .screen-step { font-size:11px; font-weight:700; color:#fff; background:#8B7EC8; padding:3px 10px; border-radius:6px; }
+  .screen-step.s0 { background:#4A7BA3; } .screen-step.s1{ background:#7A9E7E; }
+  .screen-step.s2 { background:#C17A4A; } .screen-step.s3{ background:#C04A8A; } .screen-step.s4{ background:#3D7A6A; }
+  .screen-title { font-size:15px; font-weight:700; font-family:Georgia, serif; }
+
+  .ref { border:1px solid #EEE7DC; border-radius:10px; padding:13px 15px; margin-bottom:10px; background:#fff; }
+  .ref.new { border-left:3px solid #4A7BA3; }
+  .ref.keep { border-left:3px solid #8B7EC8; }
+  .ref-top { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; flex-wrap:wrap; margin-bottom:6px; }
+  .ref-title { font-size:13px; font-weight:700; }
+  .ref-tags { text-align:right; }
+  .ref-row { font-size:12px; margin:5px 0; color:#4A4A4A; }
+  .ref-row b { color:#2C2C2C; }
+  .ref-label { display:inline-block; width:62px; font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:#A89880; font-weight:700; vertical-align:top; }
+  .ref-val { display:inline-block; width:calc(100% - 70px); }
+  .strike { color:#B0A698; text-decoration:line-through; }
+  .arrow-in { color:#3A7A44; font-weight:700; }
+
+  .decision { background:#FBF8F2; border:1px solid #E2D6BE; border-radius:10px; padding:10px 14px; margin:8px 0 14px; font-size:12px; }
+  .decision b { color:#7A5A1A; }
+
+  .locked { background:#2C2C2C; color:#EDE6DA; border-radius:12px; padding:16px 18px; }
+  .locked .section-title { color:#fff; border-color:#4A4A4A; }
+  .locked-item { font-size:12.5px; margin:7px 0; color:#D8CFC0; }
+  .locked-item b { color:#fff; }
+
+  .open-q { font-size:12.5px; margin:8px 0; padding-left:18px; position:relative; color:#4A4A4A; }
+  .open-q::before { content:"?"; position:absolute; left:0; top:0; width:14px; height:14px; background:#E6EEF6; color:#2A5A8A; border-radius:50%; font-size:9px; font-weight:700; display:flex; align-items:center; justify-content:center; }
+
+  .foot { font-size:11px; color:#C8BCA8; text-align:center; margin-top:10px; }
+  @media (max-width:700px){ body{padding:16px;} .flow-step{min-width:100%;} .ref-val{width:100%;} }
+</style>
+</head>
+<body>
+
+<h1>Moodboard — UX Refinement Spec</h1>
+<div class="meta">Cascadia AI Hackathon 2026 · direction for wireframe v0.6 · Dianne Ting · derived from UX research + wireframe v0.5 self-review</div>
+
+<!-- LEGEND -->
+<div class="card" style="margin-bottom:28px; background:#FCFAF6;">
+  <div class="legend">
+    <span class="lbl">Source</span>
+    <span class="chip c-new">🆕 New this round</span>
+    <span class="chip c-keep">✓ Carried from your v0.5</span>
+  </div>
+  <div class="legend">
+    <span class="lbl">Priority</span>
+    <span class="chip c-must">🚨 Must</span>
+    <span class="chip c-high">⭐ High</span>
+    <span class="chip c-nice">◦ Nice-to-have</span>
+  </div>
+  <div class="legend" style="margin-bottom:0;">
+    <span class="lbl">Serves</span>
+    <span class="chip c-alex">🟣 Alex</span>
+    <span class="chip c-jordan">🟠 Jordan</span>
+    <span class="chip c-maya">🟢 Maya</span>
+    <span class="chip c-prin">◆ Principle</span>
+  </div>
+</div>
+
+<!-- LOCKED DECISIONS -->
+<div class="section">
+  <div class="locked">
+    <div class="section-title">Decisions locked for this round</div>
+    <div class="locked-item">🔒 <b>Empty / sparse rooms → reassure, don't skip.</b> An empty room is the <em>ideal</em> composite input (clean walls, floor, light). We remove the "skip" path and replace the anxiety with reassurance — protecting the "that's MY room" emotional peak for Jordan &amp; Maya.</div>
+    <div class="locked-item">🔒 <b>Add a front door (Step 0).</b> A landing/trust screen before upload — hero, 3-second before/after proof, and an "any budget" promise — to clear the trust barrier and Maya's distrust before she commits.</div>
+    <div class="locked-item">🔒 <b>Mobile-first.</b> Every persona photographs on a phone and shares to TikTok / IG / Close Friends. The result screen in particular is rebuilt phone-first (stacked, not the v0.5 desktop 2-column).</div>
+  </div>
+</div>
+
+<!-- REFINED FLOW -->
+<div class="section">
+  <div class="section-title">Refined end-to-end flow</div>
+  <div class="section-intro">v0.5 had 4 steps (Upload → Style/Budget → Analyzing → Result). v0.6 adds a front door and re-sequences Budget before Style. Step 0 is new; all five are mobile-first.</div>
+  <div class="flow">
+    <div class="flow-step is-new">
+      <div class="flow-num">🆕 Step 0</div>
+      <div class="flow-name">Front door</div>
+      <div class="flow-desc">Hero + 3-sec before/after proof + "works at any budget" promise. One CTA → start.</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-num">Step 1</div>
+      <div class="flow-name">Upload your room</div>
+      <div class="flow-desc">"Empty is perfect" reassurance. 1+ photo, drop zone, shooting tips. No skip.</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-num">Step 2</div>
+      <div class="flow-name">Budget → Style</div>
+      <div class="flow-desc">Budget first (inclusive low anchors), then visual photo tiles. No text box.</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-num">Step 3</div>
+      <div class="flow-name">AI working</div>
+      <div class="flow-desc">Real animated steps, incl. "filtering to your budget" + "compositing your room."</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-num">Step 4</div>
+      <div class="flow-name">Your moodboard</div>
+      <div class="flow-desc">Composited room + cohesion signal + buy-order + budget total. Save / share.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ STEP 0 ════ -->
+<div class="section">
+  <div class="section-title">Step 0 · Front door <span style="font-size:12px;color:#4A7BA3;">(new screen)</span></div>
+  <div class="screen">
+
+    <div class="ref new">
+      <div class="ref-top">
+        <div class="ref-title">Hero leads with the mismatch pain</div>
+        <div class="ref-tags"><span class="chip c-new">🆕</span><span class="chip c-must">🚨</span></div>
+      </div>
+      <div class="ref-row"><span class="ref-label">Change</span><span class="ref-val">Headline names the feeling: <i>"Your pieces don't talk to each other."</i> Sub-copy nods to all three situations (mismatched room / empty room / tight budget) so each persona feels seen in the first 3 seconds.</span></div>
+      <div class="ref-row"><span class="ref-label">Why</span><span class="ref-val">Journey stages 1–2 (Trigger + Discovery) happen before upload — v0.5 had no screen for them.</span></div>
+      <div class="ref-row"><span class="ref-label">Serves</span><span class="ref-val"><span class="chip c-alex">🟣</span><span class="chip c-jordan">🟠</span><span class="chip c-maya">🟢</span></span></div>
+    </div>
+
+    <div class="ref new">
+      <div class="ref-top">
+        <div class="ref-title">3-second before / after proof</div>
+        <div class="ref-tags"><span class="chip c-new">🆕</span><span class="chip c-must">🚨</span></div>
+      </div>
+      <div class="ref-row"><span class="ref-label">Change</span><span class="ref-val">An auto-playing (or swipe) before→after of a real room above the fold. This is the single strongest trust signal — show the magic, don't describe it.</span></div>
+      <div class="ref-row"><span class="ref-label">Why</span><span class="ref-val">Research: "trust barrier — another AI gimmick? needs to feel legit fast" + "social proof: show a before/after in 3 seconds."</span></div>
+      <div class="ref-row"><span class="ref-label">Serves</span><span class="ref-val"><span class="chip c-prin">◆ Show, don't ask</span></span></div>
+    </div>
+
+    <div class="ref new">
+      <div class="ref-top">
+        <div class="ref-title">"Works at any budget" promise</div>
+        <div class="ref-tags"><span class="chip c-new">🆕</span><span class="chip c-high">⭐</span></div>
+      </div>
+      <div class="ref-row"><span class="ref-label">Change</span><span class="ref-val">An explicit inclusivity line on the landing ("From $100 to $5,000 — works at any budget"). Disarms Maya's distrust before she even uploads.</span></div>
+      <div class="ref-row"><span class="ref-label">Why</span><span class="ref-val">Maya: <i>"This better not show me things I can't afford"</i> / "this tool is for people with real budgets."</span></div>
+      <div class="ref-row"><span class="ref-label">Serves</span><span class="ref-val"><span class="chip c-maya">🟢</span></span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════ STEP 1 ════ -->
+<div class="section">
+  <div class="section-title">Step 1 · Upload your room</div>
+  <div class="screen">
+
+    <div class="decision"><b>Decision applied:</b> the v0.5 "I'm starting fresh — skip" link is <span class="strike">removed</span>. Replaced with reassurance below.</div>
+
+    <div class="ref new">
+      <div class="ref-top">
+        <div class="ref-title">Reframe empty / sparse as the ideal input</div>
+        <div class="ref-tags"><span class="chip c-new">🆕</span><span class="chip c-must">🚨</span></div>
+      </div>
+      <div class="ref-row"><span class="ref-label">Change</span><span class="ref-val"><span class="strike">"Skip — I'm starting from scratch →"</span> <span class="arrow-in">→</span> <i>"Empty room? Perfect. We just need your walls, floor &amp; light."</i> Keep them uploading so the composite still lands on <em>their</em> room.</span></div>
+      <div class="ref-row"><span class="ref-label">Why</span><span class="ref-val">Skipping removes the photo that powers the "that's MY room" peak — for 2 of 3 personas. An empty room actually composites better.</span></div>
+      <div class="ref-row"><span class="ref-label">Serves</span><span class="ref-val"><span class="chip c-jordan">🟠</span><span class="chip c-maya">🟢</span> · solves "photo anxiety"</span></div>
+    </div>
+
+    <div class="ref keep">
+      <div class="ref-top">
+        <div class="ref-title">Keep: drop zone, thumbnail grid, shooting tips</div>
+        <div class="ref-tags"><span class="chip c-keep">✓ v0.5</span></div>
+      </div>
+      <div class="ref-row"><span class="ref-label">Note</span><span class="ref-val">Low-friction upload + "messy is fine — AI doesn't judge" already address photo anxiety well. Carry forward as-is.</span></div>
+    </div>
+
+    <div class="ref new">
+      <div class="ref-top">
+        <div class="ref-title">Drop the per-photo "Label this space" dropdown</div>
+        <div class="ref-tags"><span class="chip c-new">🆕</span><span class="chip c-nice">◦</span></div>
+      </div>
+      <div class="ref-row"><span class="ref-label">Change</span><span class="ref-val">Remove the required/optional label selects on each thumbnail (or auto-detect silently). The AI reads the photo — asking the user to tag it is an "ask" we don't need.</span></div>
+      <div class="ref-row"><span class="ref-label">Why</span><span class="ref-val">Contradicts Principle 1 ("show, don't ask") and adds friction at the most anxious step.</span></div>
+      <div class="ref-row"><span class="ref-label">Serves</span><span class="ref-val"><span class="chip c-prin">◆ Show, don't ask</span></span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════ STEP 2 ════ -->
+<div class="section">
+  <div class="section-title">Step 2 · Budget → Style</div>
+  <div class="screen">
+
+    <div class="ref keep">
+      <div class="ref-top">
+        <div class="ref-title">Keep: budget first, no text box, visual style tiles</div>
+        <div class="ref-tags"><span class="chip c-keep">✓ v0.5</span><span class="chip c-must">🚨</span></div>
+      </div>
+      <div class="ref-row"><span class="ref-label">Carry</span><span class="ref-val">Your three v0.5 calls stand: (1) delete the open text box, (2) replace style name tags with 8–12 real room photo tiles + descriptive labels ("Warm &amp; minimal", not "Japandi"), (3) budget slider moves above style.</span></div>
+      <div class="ref-row"><span class="ref-label">Serves</span><span class="ref-val"><span class="chip c-prin">◆ Show, don't ask</span> · all personas</span></div>
+    </div>
+
+    <div class="ref new">
+      <div class="ref-top">
+        <div class="ref-title">Make the budget control inclusive at the low end</div>
+        <div class="ref-tags"><span class="chip c-new">🆕</span><span class="chip c-high">⭐</span></div>
+      </div>
+      <div class="ref-row"><span class="ref-label">Change</span><span class="ref-val">Add quick-pick anchors (<b>$100 · $300 · $600 · custom</b>) above the slider, with a validating line ("any budget works — we'll find pieces that fit"). Reconsider the $280 default + $5,000 ceiling framing, which currently reads "for people with money."</span></div>
+      <div class="ref-row"><span class="ref-label">Why</span><span class="ref-val">A $120 user dragging a slider that goes to $5,000 feels like the odd one out — the exact fear that makes Maya distrust the tool.</span></div>
+      <div class="ref-row"><span class="ref-label">Serves</span><span class="ref-val"><span class="chip c-maya">🟢</span> · "budget-setting first helps Maya"</span></div>
+    </div>
+
+    <div class="ref keep">
+      <div class="ref-top">
+        <div class="ref-title">Keep: color-mood tiles + AI budget suggestion</div>
+        <div class="ref-tags"><span class="chip c-keep">✓ v0.5</span></div>
+      </div>
+      <div class="ref-row"><span class="ref-label">Note</span><span class="ref-val">Both are the right visual-input pattern. Keep "AI suggests $200–$350 based on your photo" as a hint, not a forced range.</span></div>
+    </div>
+
+    <div class="ref new">
+      <div class="ref-top">
+        <div class="ref-title">Add a "none of these feel right" path</div>
+        <div class="ref-tags"><span class="chip c-new">🆕</span><span class="chip c-nice">◦</span></div>
+      </div>
+      <div class="ref-row"><span class="ref-label">Change</span><span class="ref-val">A "show me more" / "not my vibe" affordance on the style tiles so a user who likes none isn't stuck. Still no typing.</span></div>
+      <div class="ref-row"><span class="ref-label">Serves</span><span class="ref-val"><span class="chip c-prin">◆ Show, don't ask</span></span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════ STEP 3 ════ -->
+<div class="section">
+  <div class="section-title">Step 3 · AI working</div>
+  <div class="screen">
+
+    <div class="ref keep">
+      <div class="ref-top">
+        <div class="ref-title">Keep: real animated steps (not a spinner) + add compositing step</div>
+        <div class="ref-tags"><span class="chip c-keep">✓ v0.5</span></div>
+      </div>
+      <div class="ref-row"><span class="ref-label">Carry</span><span class="ref-val">Your v0.5 5th step "Compositing picks into your room photo…" stays — it sets up the emotional peak instead of surprising them.</span></div>
+      <div class="ref-row"><span class="ref-label">Serves</span><span class="ref-val">solves "dead time"</span></div>
+    </div>
+
+    <div class="ref new">
+      <div class="ref-top">
+        <div class="ref-title">Tie one loading step to budget reassurance</div>
+        <div class="ref-tags"><span class="chip c-new">🆕</span><span class="chip c-high">⭐</span></div>
+      </div>
+      <div class="ref-row"><span class="ref-label">Change</span><span class="ref-val">One visible step reads <i>"Filtering to your $120 budget…"</i> (echoes the user's actual number). Turns dead time into live proof the tool respects their budget.</span></div>
+      <div class="ref-row"><span class="ref-label">Why</span><span class="ref-val">Maya: <i>"Please be things under $30. Please."</i> — reassure during the wait, not only at the result.</span></div>
+      <div class="ref-row"><span class="ref-label">Serves</span><span class="ref-val"><span class="chip c-maya">🟢</span></span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════ STEP 4 ════ -->
+<div class="section">
+  <div class="section-title">Step 4 · Your moodboard (the emotional peak)</div>
+  <div class="section-intro">You called this your strongest screen — most of it carries forward. The refinements below close the gap between what's shown (per-item fit) and what the research says each persona actually needs (cohesion, buy-order, a phone-first share).</div>
+  <div class="screen">
+
+    <div class="ref new">
+      <div class="ref-top">
+        <div class="ref-title">Add a cohesion signal (≠ per-item match %)</div>
+        <div class="ref-tags"><span class="chip c-new">🆕</span><span class="chip c-must">🚨</span></div>
+      </div>
+      <div class="ref-row"><span class="ref-label">Change</span><span class="ref-val">Add an overall <b>"these pieces work as a set"</b> signal at the top of results (a cohesion score / one-line rationale). The v0.5 "98% fit / 94% fit" badges measure each item <em>against the room</em> — not whether the items go <em>together</em>.</span></div>
+      <div class="ref-row"><span class="ref-label">Why</span><span class="ref-val">Mismatch is the #1 pain and the product's core promise (Principle 2). Research literally asks for "cohesion score % for Alex."</span></div>
+      <div class="ref-row"><span class="ref-label">Serves</span><span class="ref-val"><span class="chip c-alex">🟣</span><span class="chip c-prin">◆ Cohesion is the promise</span></span></div>
+    </div>
+
+    <div class="ref new">
+      <div class="ref-top">
+        <div class="ref-title">Add buy-priority / spend order</div>
+        <div class="ref-tags"><span class="chip c-new">🆕</span><span class="chip c-high">⭐</span></div>
+      </div>
+      <div class="ref-row"><span class="ref-label">Change</span><span class="ref-val">Rank items with a "buy this first" order + a simple spend breakdown ("start with the rug — it sets the tone"). v0.5 lists products flat with no sequence.</span></div>
+      <div class="ref-row"><span class="ref-label">Why</span><span class="ref-val">Jordan's empty room needs a path, not a pile: "prioritised shopping order" + "buy the top 3 this weekend."</span></div>
+      <div class="ref-row"><span class="ref-label">Serves</span><span class="ref-val"><span class="chip c-jordan">🟠</span></span></div>
+    </div>
+
+    <div class="ref new">
+      <div class="ref-top">
+        <div class="ref-title">Rebuild mobile-first; before/after share is first-class</div>
+        <div class="ref-tags"><span class="chip c-new">🆕</span><span class="chip c-must">🚨</span></div>
+      </div>
+      <div class="ref-row"><span class="ref-label">Change</span><span class="ref-val">Replace the v0.5 desktop 2-column (<span class="strike">1fr / 380px</span>) with a stacked phone layout: composited photo on top, product cards below. Make <b>"Share before/after"</b> a primary action (Maya's TikTok / Close Friends moment), not a buried "Share link."</span></div>
+      <div class="ref-row"><span class="ref-label">Why</span><span class="ref-val">All three personas shoot and share on a phone. The peak moment must be perfect on mobile.</span></div>
+      <div class="ref-row"><span class="ref-label">Serves</span><span class="ref-val"><span class="chip c-maya">🟢</span> · all personas</span></div>
+    </div>
+
+    <div class="ref new">
+      <div class="ref-top">
+        <div class="ref-title">Tailor the primary action per persona need</div>
+        <div class="ref-tags"><span class="chip c-new">🆕</span><span class="chip c-nice">◦</span></div>
+      </div>
+      <div class="ref-row"><span class="ref-label">Change</span><span class="ref-val">Keep Save / Share / Buy all present, but lead with the right one: Alex → save/email PDF to revisit; Jordan → buy-links front; Maya → before/after image share. Closes the "action gap — what do I do now?"</span></div>
+      <div class="ref-row"><span class="ref-label">Serves</span><span class="ref-val"><span class="chip c-alex">🟣</span><span class="chip c-jordan">🟠</span><span class="chip c-maya">🟢</span><span class="chip c-prin">◆ Save for later is the CTA</span></span></div>
+    </div>
+
+    <div class="ref new">
+      <div class="ref-top">
+        <div class="ref-title">Show the full starter set (6–10), and make swap budget-aware</div>
+        <div class="ref-tags"><span class="chip c-new">🆕</span><span class="chip c-high">⭐</span></div>
+      </div>
+      <div class="ref-row"><span class="ref-label">Change</span><span class="ref-val">v0.5 shows 2 cards; personas expect a 6–10-piece starter kit. When a user swaps an item, the running total updates live against the cap (swapping a $129 lamp for a $40 one should visibly change the budget bar).</span></div>
+      <div class="ref-row"><span class="ref-label">Serves</span><span class="ref-val"><span class="chip c-jordan">🟠</span><span class="chip c-alex">🟣</span></span></div>
+    </div>
+
+    <div class="ref keep">
+      <div class="ref-top">
+        <div class="ref-title">Keep: composited photo, before/after toggle, "why this fits", running budget vs cap, per-item swap, match %, PDF contents list</div>
+        <div class="ref-tags"><span class="chip c-keep">✓ v0.5</span></div>
+      </div>
+      <div class="ref-row"><span class="ref-label">Note</span><span class="ref-val">All carry forward. The new cohesion signal sits <em>alongside</em> match %, not instead of it.</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- OPEN QUESTIONS -->
+<div class="section">
+  <div class="section-title">Open questions for the next round</div>
+  <div class="card">
+    <div class="open-q">If the AI mis-reads the style, the only recovery today is "Start over." Worth a lightweight <b>visual</b> nudge ("warmer / simpler / cheaper" chips) — still no typing — or is per-item swap enough for the hackathon scope?</div>
+    <div class="open-q">Step 0 landing: one shared hero, or does the sub-copy rotate/segment by situation (mismatched / empty / budget)? Shared is simpler for the demo.</div>
+    <div class="open-q">Cohesion signal format: a single % score (Alex-friendly) vs a plain-language "these go together because…" line vs both?</div>
+    <div class="open-q">For the hackathon demo, do we wireframe all 5 screens, or go deep on Step 0 + Step 4 (the trust setup and the payoff) and keep 1–3 lighter?</div>
+  </div>
+</div>
+
+<div class="foot">Moodboard · Cascadia AI Hackathon 2026 · UX Refinement Spec (v0.6 direction) · Dianne Ting</div>
+
+</body>
+</html>

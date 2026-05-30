@@ -1,2 +1,15 @@
 .env
 node_modules/
+
+# OS / editor / tool junk
+.DS_Store
+.vscode/
+.cursorindexingignore
+
+# Local agent / tooling caches (not for the team repo)
+.playwright-mcp/
+.specstory/
+.vite/
+
+# Local-only backup of the standalone reroom-frontend repo (superseded by reroom-frontend/)
+reroom-frontend.local-backup/

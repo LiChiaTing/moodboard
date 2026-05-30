@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moodboard — UX Research</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: #FAF8F5; color: #2C2C2C; font-size: 13px; padding: 32px; }
+
+  h1 { font-family: Georgia, serif; font-size: 28px; font-weight: normal; color: #2C2C2C; margin-bottom: 6px; }
+  .meta { font-size: 12px; color: #9A8E80; margin-bottom: 32px; }
+
+  .section-title { font-size: 18px; font-family: Georgia, serif; font-weight: normal; color: #2C2C2C; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1.5px solid #E8E0D4; }
+  .section { margin-bottom: 48px; }
+
+  .section-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #A89880; margin-bottom: 8px; }
+
+  .card { border: 1px solid #E8E0D4; border-radius: 12px; padding: 16px; background: #fff; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+  /* Tags */
+  .tag { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; margin: 2px; }
+  .tag-pain { background: #FDE8E0; color: #C04A2A; }
+  .tag-goal { background: #E6F0E8; color: #3A7A44; }
+  .tag-neutral { background: #F2EDE6; color: #8A7060; }
+  .tag-insight { background: #E6EEF6; color: #2A5A8A; }
+  .tag-opp { background: #E6F0E8; color: #3A7A44; }
+
+  /* Persona */
+  .persona-header { display: flex; gap: 16px; align-items: flex-start; }
+  .avatar { width: 64px; height: 64px; border-radius: 50%; flex-shrink: 0; border: 2px solid #E8E0D4; overflow: hidden; }
+  .avatar img { width: 100%; height: 100%; display: block; }
+  .avatar-alex { border-color: #C4B8E0; }
+  .avatar-jordan { border-color: #E8C49A; }
+  .avatar-maya { border-color: #A8D4B4; }
+
+  .quote { font-style: italic; border-left: 2.5px solid #D4C9B8; padding-left: 10px; color: #6B6B6B; line-height: 1.6; font-size: 13px; margin-top: 8px; }
+
+  .pain-item { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; }
+  .pain-num { width: 22px; height: 22px; border-radius: 50%; background: #FDE8E0; color: #C04A2A; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .pain-title { font-weight: 600; color: #2C2C2C; font-size: 12px; }
+  .pain-text { font-size: 12px; color: #6B6B6B; line-height: 1.4; }
+
+  .bar-wrap { margin-bottom: 10px; }
+  .bar-label { display: flex; justify-content: space-between; font-size: 11px; color: #7A7A7A; margin-bottom: 4px; }
+  .bar-bg { background: #F2EDE6; border-radius: 4px; height: 8px; }
+  .bar-fill { height: 8px; border-radius: 4px; }
+  .bar-fill-alex { background: #8B7EC8; }
+  .bar-fill-jordan { background: #C17A4A; }
+  .bar-fill-maya { background: #7A9E7E; }
+
+  .success-item { background: #E6F0E8; border-radius: 8px; padding: 8px 10px; font-size: 12px; color: #2A5A44; line-height: 1.4; margin-bottom: 6px; }
+  .success-item:last-child { margin-bottom: 0; }
+
+  /* Persona badge */
+  .persona-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; margin-bottom: 12px; }
+  .badge-alex { background: #EDE8F5; color: #5A4A9A; }
+  .badge-jordan { background: #FEF0E6; color: #9A5A1A; }
+  .badge-maya { background: #E6F4EC; color: #2A7A44; }
+
+  /* Persona section divider */
+  .persona-section { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px dashed #E8E0D4; }
+  .persona-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+  /* Comparison table */
+  table.compare { width: 100%; border-collapse: collapse; font-size: 12px; }
+  table.compare th { background: #F2EDE6; padding: 8px 12px; text-align: left; font-weight: 600; color: #6B6B6B; border-bottom: 1px solid #E8E0D4; }
+  table.compare td { padding: 8px 12px; border-bottom: 1px solid #F0EAE2; color: #4A4A4A; vertical-align: top; line-height: 1.4; }
+  table.compare tr:last-child td { border-bottom: none; }
+  table.compare td:first-child { font-weight: 600; color: #6B6B6B; width: 150px; }
+
+  /* Journey Map */
+  .jm-wrap { overflow-x: auto; margin-bottom: 4px; }
+  table.jm { min-width: 960px; border-collapse: collapse; width: 100%; background: #fff; border-radius: 12px; overflow: hidden; border: 1px solid #E8E0D4; }
+  table.jm th { background: #F2EDE6; padding: 10px 12px; font-size: 11px; font-weight: 600; color: #6B6B6B; text-align: left; border-right: 1px solid #E8E0D4; border-bottom: 1px solid #E8E0D4; }
+  table.jm th:last-child { border-right: none; }
+  table.jm td { padding: 10px 12px; vertical-align: top; font-size: 12px; color: #5A5A5A; border-right: 1px solid #E8E0D4; border-bottom: 1px solid #E8E0D4; line-height: 1.5; }
+  table.jm td:last-child { border-right: none; }
+  table.jm tr:last-child td { border-bottom: none; }
+  table.jm .row-label { font-size: 11px; font-weight: 600; color: #A89880; background: #FAF8F5; width: 100px; white-space: nowrap; }
+  table.jm .row-label-persona { font-size: 11px; font-weight: 600; background: #FAF8F5; width: 100px; white-space: nowrap; }
+
+  .stage-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
+  .em { font-size: 18px; display: block; text-align: center; margin-bottom: 3px; }
+  .em-label { font-size: 10px; color: #9A8E80; text-align: center; display: block; }
+
+  /* Persona callout rows */
+  .p-alex { color: #5A4A9A; font-size: 11px; line-height: 1.4; }
+  .p-jordan { color: #9A5A1A; font-size: 11px; line-height: 1.4; }
+  .p-maya { color: #2A7A44; font-size: 11px; line-height: 1.4; }
+  .p-label { font-weight: 700; display: inline-block; margin-right: 3px; }
+  .callout-row td { padding: 8px 12px; border-right: 1px solid #E8E0D4; border-bottom: 1px solid #E8E0D4; vertical-align: top; }
+  .callout-row td:last-child { border-right: none; }
+
+  /* Opp callouts */
+  .opp-row td { background: #F8FBF8; }
+
+  /* Design principles */
+  .principle { border: 1px solid #E8E0D4; border-radius: 12px; padding: 14px; background: #fff; }
+  .principle-title { font-size: 13px; font-weight: 600; color: #2C2C2C; margin-bottom: 6px; }
+  .principle-body { font-size: 12px; color: #6B6B6B; line-height: 1.5; }
+
+  @media (max-width: 700px) {
+    .grid2, .grid3 { grid-template-columns: 1fr; }
+    body { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Moodboard — UX Research</h1>
+<div class="meta">Cascadia AI Hackathon 2026 · 3 User Personas + Journey Map · Dianne Ting, sole designer</div>
+
+<!-- ─── CORE PRODUCT CAPABILITIES ─── -->
+<div class="section">
+  <div class="section-title">Core product capabilities</div>
+  <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:12px; margin-bottom:16px;">
+    <div class="card" style="border-left:3px solid #8B7EC8;">
+      <div style="font-size:11px; font-weight:700; color:#8B7EC8; text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px;">① Read the space</div>
+      <div style="font-size:12px; color:#5A5A5A; line-height:1.5;">AI analyses the user's uploaded room photo — detecting existing colours, furniture, lighting, and layout.</div>
+    </div>
+    <div class="card" style="border-left:3px solid #C17A4A;">
+      <div style="font-size:11px; font-weight:700; color:#C17A4A; text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px;">② Understand style intent</div>
+      <div style="font-size:12px; color:#5A5A5A; line-height:1.5;">Visual style tiles + budget input let the AI infer what the user actually wants — without asking them to describe it.</div>
+    </div>
+    <div class="card" style="border-left:3px solid #4A7BA3;">
+      <div style="font-size:11px; font-weight:700; color:#4A7BA3; text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px;">③ Web search for products</div>
+      <div style="font-size:12px; color:#5A5A5A; line-height:1.5;">AI searches the web in real time for products that match the detected style, palette, and budget — not a fixed database.</div>
+    </div>
+    <div class="card" style="border-left:3px solid #7A9E7E;">
+      <div style="font-size:11px; font-weight:700; color:#7A9E7E; text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px;">④ Recommend a shopping list</div>
+      <div style="font-size:12px; color:#5A5A5A; line-height:1.5;">Curated product cards with prices, purchase links, and a "why this fits" reason for each item. Running budget tracker included.</div>
+    </div>
+    <div class="card" style="border-left:3px solid #C04A8A; background:#FDF5FA;">
+      <div style="font-size:11px; font-weight:700; color:#C04A8A; text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px;">★ ⑤ Composite into room photo</div>
+      <div style="font-size:12px; color:#5A5A5A; line-height:1.5;">AI places the recommended products into the user's actual uploaded photo — so they can see how the room would look before buying anything.</div>
+    </div>
+    <div class="card" style="border-left:3px solid #3D7A6A;">
+      <div style="font-size:11px; font-weight:700; color:#3D7A6A; text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px;">⑥ Export: photo + shopping list</div>
+      <div style="font-size:12px; color:#5A5A5A; line-height:1.5;">Final output: the synthesised room photo + full shopping list as a downloadable PDF or shareable link. The plan they can return to.</div>
+    </div>
+  </div>
+  <div class="card" style="border-color:#D4C9B8; background:#FAF8F5; padding:12px 16px;">
+    <div style="font-size:12px; color:#6B6B6B; line-height:1.8;">
+      <strong style="color:#2C2C2C;">End-to-end flow:</strong>
+      &nbsp; Upload photo &nbsp;→&nbsp; Set budget &nbsp;→&nbsp; Tap style tiles &nbsp;→&nbsp; AI reads space + searches web &nbsp;→&nbsp; See products in your actual room (composited photo) &nbsp;→&nbsp; Save photo + shopping list
+    </div>
+  </div>
+</div>
+
+<!-- ─── PERSONAS ─── -->
+<div class="section">
+  <div class="section-title">User personas</div>
+
+  <!-- PERSONA 1: ALEX -->
+  <div class="persona-section">
+    <div class="persona-badge badge-alex">🟣 Persona 1 — Alex, 28</div>
+    <div class="card" style="margin-bottom:12px;">
+      <div class="persona-header">
+        <div class="avatar avatar-alex"><img src="https://api.dicebear.com/9.x/lorelei/svg?seed=AlexRenter&backgroundColor=ede8f5&hairColor=4a3728&skinColor=d4a574" alt="Alex"></div>
+        <div style="flex:1;">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px; flex-wrap:wrap;">
+            <div style="font-size:18px; font-weight:600;">Alex, 28</div>
+            <span class="tag tag-neutral">Existing renter</span>
+            <span class="tag tag-neutral">Home office</span>
+            <span class="tag tag-neutral">$350 budget</span>
+          </div>
+          <div style="font-size:12px; color:#9A8E80; margin-bottom:10px;">Remote worker · 1-bedroom · bought furniture piecemeal over 2 years</div>
+          <div class="quote">"Give me suggestions. Don't tell me to prompt it — I usually don't know what I want."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid2" style="margin-bottom:12px;">
+      <div class="card">
+        <div class="section-label">Goals</div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; gap:8px;"><span style="color:#3A7A44; margin-top:1px;">✦</span><div style="font-size:12px; line-height:1.5; color:#5A5A5A;">Make the home office feel <strong>visually cohesive</strong> — everything looks like it belongs together</div></div>
+          <div style="display:flex; gap:8px;"><span style="color:#3A7A44; margin-top:1px;">✦</span><div style="font-size:12px; line-height:1.5; color:#5A5A5A;">Get a <strong>saved reference plan</strong> to shop from gradually — not buy everything today</div></div>
+          <div style="display:flex; gap:8px;"><span style="color:#3A7A44; margin-top:1px;">✦</span><div style="font-size:12px; line-height:1.5; color:#5A5A5A;"><strong>Discover what they like</strong> by seeing it — not by having to describe it first</div></div>
+          <div style="display:flex; gap:8px;"><span style="color:#3A7A44; margin-top:1px;">✦</span><div style="font-size:12px; line-height:1.5; color:#5A5A5A;">Stay within $350 without manually tracking spend across sessions</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-label">Pain points</div>
+        <div class="pain-item"><div class="pain-num">1</div><div><div class="pain-title">Items don't match</div><div class="pain-text">Bought pieces separately — room feels random even after real money spent</div></div></div>
+        <div class="pain-item"><div class="pain-num">2</div><div><div class="pain-title">Can't articulate their style</div><div class="pain-text">Scrolls Pinterest but can't translate inspiration into a purchase decision</div></div></div>
+        <div class="pain-item"><div class="pain-num">3</div><div><div class="pain-title">Decision fatigue</div><div class="pain-text">Too many options on Wayfair / IKEA with no filter for "fits my aesthetic"</div></div></div>
+        <div class="pain-item"><div class="pain-num">4</div><div><div class="pain-title">No trusted starting point</div><div class="pain-text">Interior designers cost $150–500/hr. Friends' taste doesn't match theirs.</div></div></div>
+        <div class="pain-item" style="margin-bottom:0;"><div class="pain-num">5</div><div><div class="pain-title">Budget blind spots</div><div class="pain-text">Loses track of total spend across multiple shopping sessions</div></div></div>
+      </div>
+    </div>
+
+    <div class="grid3">
+      <div class="card">
+        <div class="section-label">Behaviours</div>
+        <div style="display:flex; flex-direction:column; gap:7px; font-size:12px; color:#5A5A5A; line-height:1.5;">
+          <div>📌 Saves Pinterest boards but never acts on them</div>
+          <div>📱 Scrolls Instagram / TikTok decor content passively</div>
+          <div>🛍 Impulse-buys single items on Wayfair / IKEA without a plan</div>
+          <div>⏱ Puts off redecorating — feels overwhelming</div>
+          <div>💬 Shares ideas with a partner before committing</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-label">Attitude spectrum</div>
+        <div class="bar-wrap"><div class="bar-label"><span>Passive (show me)</span><span>Active (I'll search)</span></div><div class="bar-bg"><div class="bar-fill bar-fill-alex" style="width:20%;"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>Browse to save</span><span>Buy immediately</span></div><div class="bar-bg"><div class="bar-fill bar-fill-alex" style="width:18%;"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>Budget-conscious</span><span>Price-insensitive</span></div><div class="bar-bg"><div class="bar-fill bar-fill-alex" style="width:35%;"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>Style-unsure</span><span>Strong aesthetic</span></div><div class="bar-bg"><div class="bar-fill bar-fill-alex" style="width:28%;"></div></div></div>
+        <div class="bar-wrap" style="margin-bottom:0;"><div class="bar-label"><span>Renter constraints</span><span>Full freedom</span></div><div class="bar-bg"><div class="bar-fill bar-fill-alex" style="width:30%;"></div></div></div>
+      </div>
+      <div class="card">
+        <div class="section-label">What success looks like</div>
+        <div class="success-item">Sees a style they didn't know they liked — and immediately recognises it as <em>theirs</em></div>
+        <div class="success-item">Gets 6–8 products that all feel like they belong in the same room</div>
+        <div class="success-item">Downloads the moodboard PDF and shares it — feels proud of the plan</div>
+        <div class="success-item">Comes back weeks later and still has the plan to shop from</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERSONA 2: JORDAN -->
+  <div class="persona-section">
+    <div class="persona-badge badge-jordan">🟠 Persona 2 — Jordan, 26</div>
+    <div class="card" style="margin-bottom:12px;">
+      <div class="persona-header">
+        <div class="avatar avatar-jordan"><img src="https://api.dicebear.com/9.x/lorelei/svg?seed=JordanMover&backgroundColor=fef0e6&hairColor=2c1810&skinColor=c68642" alt="Jordan"></div>
+        <div style="flex:1;">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px; flex-wrap:wrap;">
+            <div style="font-size:18px; font-weight:600;">Jordan, 26</div>
+            <span class="tag tag-neutral">New mover</span>
+            <span class="tag tag-neutral">Fresh start</span>
+            <span class="tag tag-neutral">$600 budget</span>
+          </div>
+          <div style="font-size:12px; color:#9A8E80; margin-bottom:10px;">Just signed a lease on their first solo apartment · moved from shared housing · room mostly empty</div>
+          <div class="quote">"I don't even know where to start. The room is just… blank."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid2" style="margin-bottom:12px;">
+      <div class="card">
+        <div class="section-label">Goals</div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; gap:8px;"><span style="color:#3A7A44; margin-top:1px;">✦</span><div style="font-size:12px; line-height:1.5; color:#5A5A5A;">Get a <strong>starting kit</strong> — the essential 6–10 pieces that define the room's direction</div></div>
+          <div style="display:flex; gap:8px;"><span style="color:#3A7A44; margin-top:1px;">✦</span><div style="font-size:12px; line-height:1.5; color:#5A5A5A;">Commit to a <strong>style identity</strong> they won't regret 6 months from now</div></div>
+          <div style="display:flex; gap:8px;"><span style="color:#3A7A44; margin-top:1px;">✦</span><div style="font-size:12px; line-height:1.5; color:#5A5A5A;">See a clear <strong>spend breakdown</strong> — where is the budget going and in what order?</div></div>
+          <div style="display:flex; gap:8px;"><span style="color:#3A7A44; margin-top:1px;">✦</span><div style="font-size:12px; line-height:1.5; color:#5A5A5A;">Have something <strong>ready to buy soon</strong> — the empty room needs furniture, not a wish list</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-label">Pain points</div>
+        <div class="pain-item"><div class="pain-num">1</div><div><div class="pain-title">Blank canvas paralysis</div><div class="pain-text">No existing pieces to anchor from — every decision feels like it matters more</div></div></div>
+        <div class="pain-item"><div class="pain-num">2</div><div><div class="pain-title">Fear of style regret</div><div class="pain-text">"What if I pick Scandinavian and hate it in 3 months?" — can't commit without seeing the full picture first</div></div></div>
+        <div class="pain-item"><div class="pain-num">3</div><div><div class="pain-title">Too many starting points</div><div class="pain-text">Every guide says "start with the sofa" — but which sofa? From where? In what colour?</div></div></div>
+        <div class="pain-item"><div class="pain-num">4</div><div><div class="pain-title">Budget allocation anxiety</div><div class="pain-text">$600 sounds like a lot until you price out a sofa — needs help prioritising what to spend on</div></div></div>
+        <div class="pain-item" style="margin-bottom:0;"><div class="pain-num">5</div><div><div class="pain-title">Urgency + overwhelm</div><div class="pain-text">The room needs furniture now — but buying random things fast is exactly how rooms end up looking random</div></div></div>
+      </div>
+    </div>
+
+    <div class="grid3">
+      <div class="card">
+        <div class="section-label">Behaviours</div>
+        <div style="display:flex; flex-direction:column; gap:7px; font-size:12px; color:#5A5A5A; line-height:1.5;">
+          <div>🏠 Browses IKEA and Article for starting points</div>
+          <div>📷 Screenshots "room tour" videos on YouTube</div>
+          <div>🤔 Asks friends "does this go together?" before buying</div>
+          <div>⚡ More willing to buy soon — the room is empty</div>
+          <div>📊 Wants to understand spend priority (sofa vs. lamp vs. rug)</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-label">Attitude spectrum</div>
+        <div class="bar-wrap"><div class="bar-label"><span>Passive (show me)</span><span>Active (I'll search)</span></div><div class="bar-bg"><div class="bar-fill bar-fill-jordan" style="width:40%;"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>Browse to save</span><span>Buy immediately</span></div><div class="bar-bg"><div class="bar-fill bar-fill-jordan" style="width:65%;"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>Budget-conscious</span><span>Price-insensitive</span></div><div class="bar-bg"><div class="bar-fill bar-fill-jordan" style="width:50%;"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>Style-unsure</span><span>Strong aesthetic</span></div><div class="bar-bg"><div class="bar-fill bar-fill-jordan" style="width:15%;"></div></div></div>
+        <div class="bar-wrap" style="margin-bottom:0;"><div class="bar-label"><span>Renter constraints</span><span>Full freedom</span></div><div class="bar-bg"><div class="bar-fill bar-fill-jordan" style="width:35%;"></div></div></div>
+      </div>
+      <div class="card">
+        <div class="section-label">What success looks like</div>
+        <div class="success-item">Sees a complete room vision — not just individual items, but how they fit together</div>
+        <div class="success-item">Gets a prioritised shopping order ("start with the rug, it sets the tone")</div>
+        <div class="success-item">Walks away with 3–4 things they can buy this week to make the room feel like home</div>
+        <div class="success-item">Feels confident in the style direction — not worried they'll regret it</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERSONA 3: MAYA -->
+  <div class="persona-section">
+    <div class="persona-badge badge-maya">🟢 Persona 3 — Maya, 21</div>
+    <div class="card" style="margin-bottom:12px;">
+      <div class="persona-header">
+        <div class="avatar avatar-maya"><img src="https://api.dicebear.com/9.x/lorelei/svg?seed=MayaStudent&backgroundColor=e6f4ec&hairColor=1a1a2e&skinColor=f1c27d" alt="Maya"></div>
+        <div style="flex:1;">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px; flex-wrap:wrap;">
+            <div style="font-size:18px; font-weight:600;">Maya, 21</div>
+            <span class="tag tag-neutral">Student / new grad</span>
+            <span class="tag tag-neutral">First apartment</span>
+            <span class="tag tag-neutral">$120 budget</span>
+          </div>
+          <div style="font-size:12px; color:#9A8E80; margin-bottom:10px;">College senior or recent grad · first real apartment (not dorms) · shops IKEA, Facebook Marketplace, thrift</div>
+          <div class="quote">"I want it to look curated, not cheap. But I literally have $120."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid2" style="margin-bottom:12px;">
+      <div class="card">
+        <div class="section-label">Goals</div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; gap:8px;"><span style="color:#3A7A44; margin-top:1px;">✦</span><div style="font-size:12px; line-height:1.5; color:#5A5A5A;">Make the room look <strong>intentional and curated</strong> — not thrown together on a budget</div></div>
+          <div style="display:flex; gap:8px;"><span style="color:#3A7A44; margin-top:1px;">✦</span><div style="font-size:12px; line-height:1.5; color:#5A5A5A;">Find pieces that are <strong>under $30 each</strong> — IKEA, thrift, or dupes are all fine</div></div>
+          <div style="display:flex; gap:8px;"><span style="color:#3A7A44; margin-top:1px;">✦</span><div style="font-size:12px; line-height:1.5; color:#5A5A5A;">Get something to <strong>screenshot and share</strong> — TikTok "room makeover" moment</div></div>
+          <div style="display:flex; gap:8px;"><span style="color:#3A7A44; margin-top:1px;">✦</span><div style="font-size:12px; line-height:1.5; color:#5A5A5A;">Prove that <strong>good taste ≠ expensive</strong> to herself and anyone who visits</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-label">Pain points</div>
+        <div class="pain-item"><div class="pain-num">1</div><div><div class="pain-title">Everything costs too much</div><div class="pain-text">AI tools and "room makeover" content always recommend things way out of her budget</div></div></div>
+        <div class="pain-item"><div class="pain-num">2</div><div><div class="pain-title">Style exists, execution doesn't</div><div class="pain-text">Follows the right accounts, knows the aesthetics she wants — just can't afford the real thing</div></div></div>
+        <div class="pain-item"><div class="pain-num">3</div><div><div class="pain-title">Thrift hunting is time-consuming</div><div class="pain-text">Can find good things secondhand but it takes hours — needs a starting checklist</div></div></div>
+        <div class="pain-item"><div class="pain-num">4</div><div><div class="pain-title">Feels excluded from design tools</div><div class="pain-text">"This tool is for people with real budgets" — distrust before she even starts</div></div></div>
+        <div class="pain-item" style="margin-bottom:0;"><div class="pain-num">5</div><div><div class="pain-title">Sparse room = hard to photograph</div><div class="pain-text">Room doesn't look like much yet — worried AI can't work with what she has</div></div></div>
+      </div>
+    </div>
+
+    <div class="grid3">
+      <div class="card">
+        <div class="section-label">Behaviours</div>
+        <div style="display:flex; flex-direction:column; gap:7px; font-size:12px; color:#5A5A5A; line-height:1.5;">
+          <div>📱 Heavy TikTok / Instagram — follows "budget room makeover" creators</div>
+          <div>🛒 IKEA + Facebook Marketplace + thrift is her default shopping stack</div>
+          <div>📸 Shares room progress on her Close Friends story</div>
+          <div>⭐ Saves "dupe" roundups — affordable versions of expensive items</div>
+          <div>⏳ Gradual shopper — adds one piece at a time as she has money</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-label">Attitude spectrum</div>
+        <div class="bar-wrap"><div class="bar-label"><span>Passive (show me)</span><span>Active (I'll search)</span></div><div class="bar-bg"><div class="bar-fill bar-fill-maya" style="width:45%;"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>Browse to save</span><span>Buy immediately</span></div><div class="bar-bg"><div class="bar-fill bar-fill-maya" style="width:20%;"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>Budget-conscious</span><span>Price-insensitive</span></div><div class="bar-bg"><div class="bar-fill bar-fill-maya" style="width:5%;"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>Style-unsure</span><span>Strong aesthetic</span></div><div class="bar-bg"><div class="bar-fill bar-fill-maya" style="width:65%;"></div></div></div>
+        <div class="bar-wrap" style="margin-bottom:0;"><div class="bar-label"><span>Renter constraints</span><span>Full freedom</span></div><div class="bar-bg"><div class="bar-fill bar-fill-maya" style="width:25%;"></div></div></div>
+      </div>
+      <div class="card">
+        <div class="section-label">What success looks like</div>
+        <div class="success-item">Gets a moodboard plan that actually stays under $120 — no sticker shock</div>
+        <div class="success-item">Sees IKEA / thrift-friendly items, not luxury brands she can't afford</div>
+        <div class="success-item">Has a list she can reference across multiple small shopping trips</div>
+        <div class="success-item">Room goes from sparse → intentional in 3 purchases — and she can share the before/after</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <div class="card" style="border-color:#D4C9B8; margin-top:16px;">
+    <div class="section-label">Persona comparison at a glance</div>
+    <table class="compare">
+      <thead>
+        <tr>
+          <th></th>
+          <th>🟣 Alex, 28</th>
+          <th>🟠 Jordan, 26</th>
+          <th>🟢 Maya, 21</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Life stage</td><td>Settled renter</td><td>New mover</td><td>Student / new grad</td></tr>
+        <tr><td>Budget</td><td>$350</td><td>$600</td><td>$120</td></tr>
+        <tr><td>Room state</td><td>Mismatched existing pieces</td><td>Near-empty, starting fresh</td><td>Sparse / bare</td></tr>
+        <tr><td>Style clarity</td><td>Low — can't articulate it</td><td>Very low — blank canvas</td><td>Medium — knows the look, not the path</td></tr>
+        <tr><td>Shopping timeline</td><td>Weeks/months (gradual)</td><td>Soon — empty room urgency</td><td>Gradual — one item at a time</td></tr>
+        <tr><td>Top fear</td><td>Things won't match</td><td>Will regret the style choice</td><td>Everything costs too much</td></tr>
+        <tr><td>Primary CTA</td><td>Download PDF to revisit later</td><td>"Ready to buy" — link out fast</td><td>Save / share the plan</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ─── JOURNEY MAP ─── -->
+<div class="section">
+  <div class="section-title">User journey map — shared flow with persona callouts</div>
+  <div style="font-size:12px; color:#9A8E80; margin-bottom:8px;">All 3 personas follow the same 7-stage flow. Callout rows show where each persona diverges in emotion, pain, or need.</div>
+
+  <div style="display:flex; gap:16px; margin-bottom:14px; flex-wrap:wrap;">
+    <div style="display:flex; align-items:center; gap:6px; font-size:11px;"><span style="width:10px; height:10px; border-radius:50%; background:#8B7EC8; display:inline-block;"></span> Alex — existing renter</div>
+    <div style="display:flex; align-items:center; gap:6px; font-size:11px;"><span style="width:10px; height:10px; border-radius:50%; background:#C17A4A; display:inline-block;"></span> Jordan — new mover</div>
+    <div style="display:flex; align-items:center; gap:6px; font-size:11px;"><span style="width:10px; height:10px; border-radius:50%; background:#7A9E7E; display:inline-block;"></span> Maya — student</div>
+  </div>
+
+  <div class="jm-wrap">
+    <table class="jm">
+      <thead>
+        <tr>
+          <th style="width:100px;"></th>
+          <th><span class="stage-dot" style="background:#8B7EC8;"></span>1 · Trigger</th>
+          <th><span class="stage-dot" style="background:#C17A4A;"></span>2 · Discovery</th>
+          <th><span class="stage-dot" style="background:#4A7BA3;"></span>3 · Upload</th>
+          <th><span class="stage-dot" style="background:#7A9E7E;"></span>4 · Style pick</th>
+          <th><span class="stage-dot" style="background:#C17A4A;"></span>5 · AI magic</th>
+          <th><span class="stage-dot" style="background:#8B5E8A;"></span>6 · Results</th>
+          <th><span class="stage-dot" style="background:#3D7A6A;"></span>7 · Save</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- ACTIONS -->
+        <tr>
+          <td class="row-label">Actions</td>
+          <td>Feels something is off with the room — decides to finally do something about it</td>
+          <td>Discovers Moodboard (Instagram, word of mouth). Lands on hero page.</td>
+          <td>Takes 2–3 photos on phone. Uploads. Sees thumbnails confirm upload worked.</td>
+          <td>Sets budget. Scrolls visual style tiles. Taps ones that feel right. No typing.</td>
+          <td>Watches animated steps: "Reading your space… Searching the web… Found 8 matching products…"</td>
+          <td>Sees recommended product cards AND a composited photo of their actual room with the new items placed in it. Checks running budget. Marks favourites.</td>
+          <td>Downloads the synthesised room photo + full shopping list as PDF. Shares the before/after.</td>
+        </tr>
+
+        <!-- PERSONA THOUGHTS -->
+        <tr class="callout-row" style="background:#F5F3FA;">
+          <td class="row-label-persona" style="color:#5A4A9A;">🟣 Alex thinks</td>
+          <td class="p-alex"><em>"I've spent money but it still looks off."</em></td>
+          <td class="p-alex"><em>"You just upload photos? I don't have to describe anything?"</em></td>
+          <td class="p-alex"><em>"Hope the photo is good enough. Should I clean up first?"</em></td>
+          <td class="p-alex"><em>"I like this one. I don't need to know what it's called."</em></td>
+          <td class="p-alex"><em>"It's actually searching for real products that match my room."</em></td>
+          <td class="p-alex"><em>"Wait — that's my actual room. With the new stuff in it. That looks SO much better."</em></td>
+          <td class="p-alex"><em>"I'm not buying yet but now I can see exactly what it'll look like."</em></td>
+        </tr>
+        <tr class="callout-row" style="background:#FEF8F0;">
+          <td class="row-label-persona" style="color:#9A5A1A;">🟠 Jordan thinks</td>
+          <td class="p-jordan"><em>"The room is just empty. I don't know what style I even want."</em></td>
+          <td class="p-jordan"><em>"Does this work if I don't have furniture yet?"</em></td>
+          <td class="p-jordan"><em>"I barely have anything to photograph. Will this still work?"</em></td>
+          <td class="p-jordan"><em>"I need to commit to something. What if I pick wrong?"</em></td>
+          <td class="p-jordan"><em>"It's searching the web for real products right now?"</em></td>
+          <td class="p-jordan"><em>"I can see what my empty room would look like with this stuff in it. That's what I needed."</em></td>
+          <td class="p-jordan"><em>"I'm buying the top 3 things this weekend. I can see it's going to work."</em></td>
+        </tr>
+        <tr class="callout-row" style="background:#F0F8F2;">
+          <td class="row-label-persona" style="color:#2A7A44;">🟢 Maya thinks</td>
+          <td class="p-maya"><em>"I want it to look like a real apartment, not a dorm."</em></td>
+          <td class="p-maya"><em>"This better not show me things I can't afford."</em></td>
+          <td class="p-maya"><em>"My room is kind of sparse. Will AI know what to do with this?"</em></td>
+          <td class="p-maya"><em>"I need to set my budget first so it doesn't waste my time."</em></td>
+          <td class="p-maya"><em>"Please be things under $30. Please."</em></td>
+          <td class="p-maya"><em>"Oh my god — that's MY room but it looks completely different. And it's all under $120?"</em></td>
+          <td class="p-maya"><em>"Posting the before/after to Close Friends. This is my room transformation content."</em></td>
+        </tr>
+
+        <!-- SHARED EMOTION -->
+        <tr>
+          <td class="row-label">Emotion</td>
+          <td style="text-align:center;"><span class="em">😩</span><span class="em-label">Frustrated</span></td>
+          <td style="text-align:center;"><span class="em">🤔</span><span class="em-label">Curious</span></td>
+          <td style="text-align:center;"><span class="em">😅</span><span class="em-label">Slightly anxious</span></td>
+          <td style="text-align:center;"><span class="em">😌</span><span class="em-label">Relaxed & engaged</span></td>
+          <td style="text-align:center;"><span class="em">😯</span><span class="em-label">Anticipating</span></td>
+          <td style="text-align:center;"><span class="em">🤩</span><span class="em-label">Delighted</span></td>
+          <td style="text-align:center;"><span class="em">😊</span><span class="em-label">Confident</span></td>
+        </tr>
+
+        <!-- SHARED PAIN POINTS -->
+        <tr>
+          <td class="row-label">Pain points</td>
+          <td><span class="tag tag-pain">no starting point</span> Doesn't know what's wrong, just feels wrong</td>
+          <td><span class="tag tag-pain">trust barrier</span> "Another AI gimmick?" — needs to feel legit fast</td>
+          <td><span class="tag tag-pain">photo anxiety</span> Worries a messy or sparse photo will ruin the results</td>
+          <td><span class="tag tag-pain">decision fatigue</span> Too many choices = paralysis. Budget-setting first helps Maya.</td>
+          <td><span class="tag tag-pain">dead time</span> Web search takes time — wait feels long with no feedback. Need animated progress.</td>
+          <td><span class="tag tag-pain">reality gap</span> "Will these look good in MY actual room, not a staged photo?" — composited image solves this directly.</td>
+          <td><span class="tag tag-pain">action gap</span> Has the plan and the photo but no clear next step. Need a "what do I do now?" moment.</td>
+        </tr>
+
+        <!-- OPPORTUNITIES -->
+        <tr class="opp-row">
+          <td class="row-label">Opportunities</td>
+          <td><span class="tag tag-opp">hero copy</span> Lead with the mismatch pain: "Your pieces don't talk to each other." Jordan/Maya need sub-copy that nods to their situation.</td>
+          <td><span class="tag tag-opp">social proof</span> Show a before/after room on landing page in 3 seconds</td>
+          <td><span class="tag tag-opp">photo tips</span> Show "good enough" example — messy is fine. Add "I'm starting fresh — skip this" option for Jordan/Maya.</td>
+          <td><span class="tag tag-insight">★ key UX call</span> Budget filter BEFORE style tiles. Then 8–12 real room photos, no text box. AI infers style from taps.</td>
+          <td><span class="tag tag-opp">magic loading</span> Show real steps: "Reading your space… Searching the web… Found 8 products that match…" — makes the wait feel purposeful.</td>
+          <td><span class="tag tag-insight">★ key moment</span> Split view: composited room photo on top (their actual room, transformed) + product cards below. This is the emotional peak of the product. Also: Alex gets cohesion %, Jordan gets buy priority, Maya gets budget-first layout.</td>
+          <td><span class="tag tag-opp">shareable output</span> Export = synthesised room photo + itemised shopping list as one PDF. Alex: email me this. Jordan: buy links front. Maya: share as image (before/after).</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ─── DESIGN PRINCIPLES ─── -->
+<div class="section">
+  <div class="section-title">Core design principles</div>
+  <div class="grid3">
+    <div class="principle">
+      <div class="principle-title">1 — Show, don't ask</div>
+      <div class="principle-body">Users can't articulate what they want. Every input must be visual and reactive — never an open text prompt. Budget is set by a slider, not a form field.</div>
+    </div>
+    <div class="principle">
+      <div class="principle-title">2 — Cohesion is the promise</div>
+      <div class="principle-body">The core pain is mismatch. Every product card should reinforce "these go together" — not just individual picks. Cohesion score % for Alex; starter-kit framing for Jordan.</div>
+    </div>
+    <div class="principle">
+      <div class="principle-title">3 — Save for later is the CTA</div>
+      <div class="principle-body">None of these users buy immediately on first session. The moodboard PDF + email/share option is the real conversion moment. "Buy now" links are secondary, inside the card.</div>
+    </div>
+  </div>
+</div>
+
+<div style="font-size:11px; color:#C8BCA8; text-align:center; margin-top:8px;">Moodboard · Cascadia AI Hackathon 2026 · UX Research · Dianne Ting</div>
+
+</body>
+</html>

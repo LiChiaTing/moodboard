@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moodboard — UX 研究文件</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, 'PingFang TC', 'Noto Sans TC', BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: #FAF8F5; color: #2C2C2C; font-size: 13px; padding: 32px; }
+
+  h1 { font-family: Georgia, 'PingFang TC', serif; font-size: 28px; font-weight: normal; color: #2C2C2C; margin-bottom: 6px; }
+  .meta { font-size: 12px; color: #9A8E80; margin-bottom: 32px; }
+
+  .section-title { font-size: 18px; font-family: Georgia, 'PingFang TC', serif; font-weight: normal; color: #2C2C2C; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1.5px solid #E8E0D4; }
+  .section { margin-bottom: 48px; }
+
+  .section-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #A89880; margin-bottom: 8px; }
+
+  .card { border: 1px solid #E8E0D4; border-radius: 12px; padding: 16px; background: #fff; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+  .tag { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; margin: 2px; }
+  .tag-pain { background: #FDE8E0; color: #C04A2A; }
+  .tag-goal { background: #E6F0E8; color: #3A7A44; }
+  .tag-neutral { background: #F2EDE6; color: #8A7060; }
+  .tag-insight { background: #E6EEF6; color: #2A5A8A; }
+  .tag-opp { background: #E6F0E8; color: #3A7A44; }
+
+  .persona-header { display: flex; gap: 16px; align-items: flex-start; }
+  .avatar { width: 64px; height: 64px; border-radius: 50%; flex-shrink: 0; border: 2px solid #E8E0D4; overflow: hidden; }
+  .avatar img { width: 100%; height: 100%; display: block; }
+  .avatar-alex { border-color: #C4B8E0; }
+  .avatar-jordan { border-color: #E8C49A; }
+  .avatar-maya { border-color: #A8D4B4; }
+
+  .quote { font-style: italic; border-left: 2.5px solid #D4C9B8; padding-left: 10px; color: #6B6B6B; line-height: 1.8; font-size: 13px; margin-top: 8px; }
+
+  .pain-item { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; }
+  .pain-num { width: 22px; height: 22px; border-radius: 50%; background: #FDE8E0; color: #C04A2A; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .pain-title { font-weight: 600; color: #2C2C2C; font-size: 12px; }
+  .pain-text { font-size: 12px; color: #6B6B6B; line-height: 1.6; }
+
+  .bar-wrap { margin-bottom: 10px; }
+  .bar-label { display: flex; justify-content: space-between; font-size: 11px; color: #7A7A7A; margin-bottom: 4px; }
+  .bar-bg { background: #F2EDE6; border-radius: 4px; height: 8px; }
+  .bar-fill { height: 8px; border-radius: 4px; }
+  .bar-fill-alex { background: #8B7EC8; }
+  .bar-fill-jordan { background: #C17A4A; }
+  .bar-fill-maya { background: #7A9E7E; }
+
+  .success-item { background: #E6F0E8; border-radius: 8px; padding: 8px 10px; font-size: 12px; color: #2A5A44; line-height: 1.6; margin-bottom: 6px; }
+  .success-item:last-child { margin-bottom: 0; }
+
+  .persona-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; margin-bottom: 12px; }
+  .badge-alex { background: #EDE8F5; color: #5A4A9A; }
+  .badge-jordan { background: #FEF0E6; color: #9A5A1A; }
+  .badge-maya { background: #E6F4EC; color: #2A7A44; }
+
+  .persona-section { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px dashed #E8E0D4; }
+  .persona-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+  table.compare { width: 100%; border-collapse: collapse; font-size: 12px; }
+  table.compare th { background: #F2EDE6; padding: 8px 12px; text-align: left; font-weight: 600; color: #6B6B6B; border-bottom: 1px solid #E8E0D4; }
+  table.compare td { padding: 8px 12px; border-bottom: 1px solid #F0EAE2; color: #4A4A4A; vertical-align: top; line-height: 1.6; }
+  table.compare tr:last-child td { border-bottom: none; }
+  table.compare td:first-child { font-weight: 600; color: #6B6B6B; width: 130px; }
+
+  .jm-wrap { overflow-x: auto; margin-bottom: 4px; }
+  table.jm { min-width: 960px; border-collapse: collapse; width: 100%; background: #fff; border-radius: 12px; overflow: hidden; border: 1px solid #E8E0D4; }
+  table.jm th { background: #F2EDE6; padding: 10px 12px; font-size: 11px; font-weight: 600; color: #6B6B6B; text-align: left; border-right: 1px solid #E8E0D4; border-bottom: 1px solid #E8E0D4; }
+  table.jm th:last-child { border-right: none; }
+  table.jm td { padding: 10px 12px; vertical-align: top; font-size: 12px; color: #5A5A5A; border-right: 1px solid #E8E0D4; border-bottom: 1px solid #E8E0D4; line-height: 1.6; }
+  table.jm td:last-child { border-right: none; }
+  table.jm tr:last-child td { border-bottom: none; }
+  table.jm .row-label { font-size: 11px; font-weight: 600; color: #A89880; background: #FAF8F5; width: 100px; white-space: nowrap; }
+  table.jm .row-label-persona { font-size: 11px; font-weight: 600; background: #FAF8F5; width: 100px; white-space: nowrap; }
+
+  .stage-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
+  .em { font-size: 18px; display: block; text-align: center; margin-bottom: 3px; }
+  .em-label { font-size: 10px; color: #9A8E80; text-align: center; display: block; }
+
+  .p-alex { color: #5A4A9A; font-size: 11px; line-height: 1.6; }
+  .p-jordan { color: #9A5A1A; font-size: 11px; line-height: 1.6; }
+  .p-maya { color: #2A7A44; font-size: 11px; line-height: 1.6; }
+  .callout-row td { padding: 8px 12px; border-right: 1px solid #E8E0D4; border-bottom: 1px solid #E8E0D4; vertical-align: top; }
+  .callout-row td:last-child { border-right: none; }
+  .opp-row td { background: #F8FBF8; }
+
+  .principle { border: 1px solid #E8E0D4; border-radius: 12px; padding: 14px; background: #fff; }
+  .principle-title { font-size: 13px; font-weight: 600; color: #2C2C2C; margin-bottom: 6px; }
+  .principle-body { font-size: 12px; color: #6B6B6B; line-height: 1.6; }
+
+  @media (max-width: 700px) {
+    .grid2, .grid3 { grid-template-columns: 1fr; }
+    body { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Moodboard — UX 研究文件</h1>
+<div class="meta">Cascadia AI Hackathon 2026 · 三個使用者 Persona + 使用者旅程地圖 · Dianne Ting，獨立設計師</div>
+
+<!-- ─── 核心產品功能 ─── -->
+<div class="section">
+  <div class="section-title">核心產品功能</div>
+  <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:12px; margin-bottom:16px;">
+    <div class="card" style="border-left:3px solid #8B7EC8;">
+      <div style="font-size:11px; font-weight:700; color:#8B7EC8; text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px;">① 解讀空間</div>
+      <div style="font-size:12px; color:#5A5A5A; line-height:1.6;">AI 分析用戶上傳的房間照片，識別現有的顏色、家具、光線與空間配置。</div>
+    </div>
+    <div class="card" style="border-left:3px solid #C17A4A;">
+      <div style="font-size:11px; font-weight:700; color:#C17A4A; text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px;">② 了解風格偏好</div>
+      <div style="font-size:12px; color:#5A5A5A; line-height:1.6;">透過視覺風格圖卡點選 + 預算設定，讓 AI 推斷用戶真正想要的風格，全程不需要文字描述。</div>
+    </div>
+    <div class="card" style="border-left:3px solid #4A7BA3;">
+      <div style="font-size:11px; font-weight:700; color:#4A7BA3; text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px;">③ 網路搜尋商品</div>
+      <div style="font-size:12px; color:#5A5A5A; line-height:1.6;">AI 即時搜尋網路，找出符合偵測到的風格、色調與預算的商品，非固定資料庫，每次都是最新結果。</div>
+    </div>
+    <div class="card" style="border-left:3px solid #7A9E7E;">
+      <div style="font-size:11px; font-weight:700; color:#7A9E7E; text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px;">④ 推薦購買清單</div>
+      <div style="font-size:12px; color:#5A5A5A; line-height:1.6;">精選商品卡片，附上價格、購買連結與「為什麼適合這個空間」的說明。全程顯示累計預算金額。</div>
+    </div>
+    <div class="card" style="border-left:3px solid #C04A8A; background:#FDF5FA;">
+      <div style="font-size:11px; font-weight:700; color:#C04A8A; text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px;">★ ⑤ 合成商品到照片</div>
+      <div style="font-size:12px; color:#5A5A5A; line-height:1.6;">AI 將推薦商品合成進用戶實際上傳的房間照片，讓用戶在購買前就能看到布置後的樣子。</div>
+    </div>
+    <div class="card" style="border-left:3px solid #3D7A6A;">
+      <div style="font-size:11px; font-weight:700; color:#3D7A6A; text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px;">⑥ 匯出照片 + 購物清單</div>
+      <div style="font-size:12px; color:#5A5A5A; line-height:1.6;">最終輸出：合成後的房間照片 + 完整購物清單，可下載為 PDF 或分享連結。用戶隨時可以回來繼續購物。</div>
+    </div>
+  </div>
+  <div class="card" style="border-color:#D4C9B8; background:#FAF8F5; padding:12px 16px;">
+    <div style="font-size:12px; color:#6B6B6B; line-height:2;">
+      <strong style="color:#2C2C2C;">完整流程：</strong>
+      &nbsp; 上傳照片 &nbsp;→&nbsp; 設定預算 &nbsp;→&nbsp; 點選風格圖卡 &nbsp;→&nbsp; AI 解讀空間 + 搜尋網路 &nbsp;→&nbsp; 看到商品合成進真實房間照片 &nbsp;→&nbsp; 儲存照片 + 購物清單
+    </div>
+  </div>
+</div>
+
+<!-- ─── PERSONAS ─── -->
+<div class="section">
+  <div class="section-title">使用者 Persona</div>
+
+  <!-- PERSONA 1: ALEX -->
+  <div class="persona-section">
+    <div class="persona-badge badge-alex">🟣 Persona 1 — Alex，28 歲</div>
+    <div class="card" style="margin-bottom:12px;">
+      <div class="persona-header">
+        <div class="avatar avatar-alex"><img src="https://api.dicebear.com/9.x/lorelei/svg?seed=AlexRenter&backgroundColor=ede8f5&hairColor=4a3728&skinColor=d4a574" alt="Alex"></div>
+        <div style="flex:1;">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px; flex-wrap:wrap;">
+            <div style="font-size:18px; font-weight:600;">Alex，28 歲</div>
+            <span class="tag tag-neutral">現有租客</span>
+            <span class="tag tag-neutral">居家辦公</span>
+            <span class="tag tag-neutral">預算 $350</span>
+          </div>
+          <div style="font-size:12px; color:#9A8E80; margin-bottom:10px;">遠端工作者 · 一房公寓 · 兩年來陸陸續續買家具</div>
+          <div class="quote">「給我建議就好。不要叫我自己打字描述——我通常不知道自己想要什麼。」</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid2" style="margin-bottom:12px;">
+      <div class="card">
+        <div class="section-label">目標</div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; gap:8px;"><span style="color:#3A7A44; margin-top:1px;">✦</span><div style="font-size:12px; line-height:1.6; color:#5A5A5A;">讓居家辦公室看起來<strong>有整體感</strong> — 所有東西都像是一個系列</div></div>
+          <div style="display:flex; gap:8px;"><span style="color:#3A7A44; margin-top:1px;">✦</span><div style="font-size:12px; line-height:1.6; color:#5A5A5A;">得到一份可以<strong>慢慢購物的計畫</strong> — 不是今天就要全部買齊</div></div>
+          <div style="display:flex; gap:8px;"><span style="color:#3A7A44; margin-top:1px;">✦</span><div style="font-size:12px; line-height:1.6; color:#5A5A5A;">透過<strong>看到</strong>來發現自己的喜好 — 不是靠文字描述</div></div>
+          <div style="display:flex; gap:8px;"><span style="color:#3A7A44; margin-top:1px;">✦</span><div style="font-size:12px; line-height:1.6; color:#5A5A5A;">不超過 $350，不用自己手動記帳</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-label">痛點</div>
+        <div class="pain-item"><div class="pain-num">1</div><div><div class="pain-title">家具不搭調</div><div class="pain-text">東買一件西買一件 — 花了錢，房間還是感覺很亂</div></div></div>
+        <div class="pain-item"><div class="pain-num">2</div><div><div class="pain-title">說不出自己的風格</div><div class="pain-text">刷 Pinterest 但無法把靈感轉換成實際購買決策</div></div></div>
+        <div class="pain-item"><div class="pain-num">3</div><div><div class="pain-title">選擇障礙</div><div class="pain-text">Wayfair / IKEA 選項太多，沒有辦法篩選「符合我風格」的</div></div></div>
+        <div class="pain-item"><div class="pain-num">4</div><div><div class="pain-title">沒有可信任的起點</div><div class="pain-text">室內設計師要價 $150–500/小時。朋友的品味不一定合</div></div></div>
+        <div class="pain-item" style="margin-bottom:0;"><div class="pain-num">5</div><div><div class="pain-title">預算沒概念</div><div class="pain-text">分多次購物，不知道總共花了多少</div></div></div>
+      </div>
+    </div>
+
+    <div class="grid3">
+      <div class="card">
+        <div class="section-label">行為模式</div>
+        <div style="display:flex; flex-direction:column; gap:7px; font-size:12px; color:#5A5A5A; line-height:1.6;">
+          <div>📌 存了很多 Pinterest 看板，但從沒有行動</div>
+          <div>📱 被動刷 Instagram / TikTok 布置內容</div>
+          <div>🛍 在 Wayfair / IKEA 衝動購買單件，沒有整體計畫</div>
+          <div>⏱ 一直拖著不整理，因為感覺很壓迫</div>
+          <div>💬 做決定前會先問伴侶意見</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-label">態度光譜</div>
+        <div class="bar-wrap"><div class="bar-label"><span>被動（給我看）</span><span>主動（我自己找）</span></div><div class="bar-bg"><div class="bar-fill bar-fill-alex" style="width:20%;"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>存起來慢慢買</span><span>馬上購買</span></div><div class="bar-bg"><div class="bar-fill bar-fill-alex" style="width:18%;"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>注重預算</span><span>不在乎價格</span></div><div class="bar-bg"><div class="bar-fill bar-fill-alex" style="width:35%;"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>風格不確定</span><span>有強烈品味</span></div><div class="bar-bg"><div class="bar-fill bar-fill-alex" style="width:28%;"></div></div></div>
+        <div class="bar-wrap" style="margin-bottom:0;"><div class="bar-label"><span>租客限制多</span><span>完全自由</span></div><div class="bar-bg"><div class="bar-fill bar-fill-alex" style="width:30%;"></div></div></div>
+      </div>
+      <div class="card">
+        <div class="section-label">成功的樣子</div>
+        <div class="success-item">看到一個自己以前不知道會喜歡的風格 — 然後馬上認出「對，這就是我」</div>
+        <div class="success-item">拿到 6–8 件感覺屬於同一個房間的商品</div>
+        <div class="success-item">下載 PDF 分享給人 — 為這份計畫感到驕傲</div>
+        <div class="success-item">幾週後回來，計畫還在，可以繼續購物</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERSONA 2: JORDAN -->
+  <div class="persona-section">
+    <div class="persona-badge badge-jordan">🟠 Persona 2 — Jordan，26 歲</div>
+    <div class="card" style="margin-bottom:12px;">
+      <div class="persona-header">
+        <div class="avatar avatar-jordan"><img src="https://api.dicebear.com/9.x/lorelei/svg?seed=JordanMover&backgroundColor=fef0e6&hairColor=2c1810&skinColor=c68642" alt="Jordan"></div>
+        <div style="flex:1;">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px; flex-wrap:wrap;">
+            <div style="font-size:18px; font-weight:600;">Jordan，26 歲</div>
+            <span class="tag tag-neutral">新搬入者</span>
+            <span class="tag tag-neutral">全新開始</span>
+            <span class="tag tag-neutral">預算 $600</span>
+          </div>
+          <div style="font-size:12px; color:#9A8E80; margin-bottom:10px;">剛簽租約的第一個獨立公寓 · 從合租搬出來 · 房間幾乎是空的</div>
+          <div class="quote">「我根本不知道從哪裡開始。房間就是……空的。」</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid2" style="margin-bottom:12px;">
+      <div class="card">
+        <div class="section-label">目標</div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; gap:8px;"><span style="color:#3A7A44; margin-top:1px;">✦</span><div style="font-size:12px; line-height:1.6; color:#5A5A5A;">得到一個<strong>入門套件</strong> — 6–10 件確立房間方向的基礎家具</div></div>
+          <div style="display:flex; gap:8px;"><span style="color:#3A7A44; margin-top:1px;">✦</span><div style="font-size:12px; line-height:1.6; color:#5A5A5A;">確定一個<strong>不會後悔的風格方向</strong>，六個月後還是喜歡</div></div>
+          <div style="display:flex; gap:8px;"><span style="color:#3A7A44; margin-top:1px;">✦</span><div style="font-size:12px; line-height:1.6; color:#5A5A5A;">看到清楚的<strong>預算分配</strong> — 錢要花在哪裡？先買什麼？</div></div>
+          <div style="display:flex; gap:8px;"><span style="color:#3A7A44; margin-top:1px;">✦</span><div style="font-size:12px; line-height:1.6; color:#5A5A5A;">有可以<strong>近期就購買</strong>的東西 — 空房間不能再等了</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-label">痛點</div>
+        <div class="pain-item"><div class="pain-num">1</div><div><div class="pain-title">空白畫布的恐慌</div><div class="pain-text">沒有任何既有家具可以當基準 — 每個決定感覺都很重要</div></div></div>
+        <div class="pain-item"><div class="pain-num">2</div><div><div class="pain-title">害怕後悔風格選擇</div><div class="pain-text">「如果我選了北歐風，三個月後不喜歡怎麼辦？」— 沒看到完整畫面就不敢決定</div></div></div>
+        <div class="pain-item"><div class="pain-num">3</div><div><div class="pain-title">太多起點，選不了</div><div class="pain-text">每篇攻略都說「從沙發開始」— 但是哪張沙發？哪個顏色？</div></div></div>
+        <div class="pain-item"><div class="pain-num">4</div><div><div class="pain-title">預算分配焦慮</div><div class="pain-text">$600 聽起來很多，直到你去看沙發的價格 — 需要有人幫忙排優先順序</div></div></div>
+        <div class="pain-item" style="margin-bottom:0;"><div class="pain-num">5</div><div><div class="pain-title">急迫感 + 不知所措</div><div class="pain-text">現在就需要家具，但衝動購買正是讓房間看起來亂的原因</div></div></div>
+      </div>
+    </div>
+
+    <div class="grid3">
+      <div class="card">
+        <div class="section-label">行為模式</div>
+        <div style="display:flex; flex-direction:column; gap:7px; font-size:12px; color:#5A5A5A; line-height:1.6;">
+          <div>🏠 逛 IKEA 和 Article 找靈感</div>
+          <div>📷 截圖 YouTube 房間導覽影片</div>
+          <div>🤔 買之前會問朋友「這個搭嗎？」</div>
+          <div>⚡ 比較願意近期購買 — 房間是空的</div>
+          <div>📊 想了解預算優先順序（沙發 vs 燈 vs 地毯）</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-label">態度光譜</div>
+        <div class="bar-wrap"><div class="bar-label"><span>被動（給我看）</span><span>主動（我自己找）</span></div><div class="bar-bg"><div class="bar-fill bar-fill-jordan" style="width:40%;"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>存起來慢慢買</span><span>馬上購買</span></div><div class="bar-bg"><div class="bar-fill bar-fill-jordan" style="width:65%;"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>注重預算</span><span>不在乎價格</span></div><div class="bar-bg"><div class="bar-fill bar-fill-jordan" style="width:50%;"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>風格不確定</span><span>有強烈品味</span></div><div class="bar-bg"><div class="bar-fill bar-fill-jordan" style="width:15%;"></div></div></div>
+        <div class="bar-wrap" style="margin-bottom:0;"><div class="bar-label"><span>租客限制多</span><span>完全自由</span></div><div class="bar-bg"><div class="bar-fill bar-fill-jordan" style="width:35%;"></div></div></div>
+      </div>
+      <div class="card">
+        <div class="section-label">成功的樣子</div>
+        <div class="success-item">看到完整的房間願景 — 不只是單件商品，而是它們如何組合在一起</div>
+        <div class="success-item">拿到有優先順序的購買清單（「先買地毯，它決定整個空間的調性」）</div>
+        <div class="success-item">這週就能買 3–4 件，讓房間開始有家的感覺</div>
+        <div class="success-item">對風格方向有信心 — 不再擔心以後會後悔</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERSONA 3: MAYA -->
+  <div class="persona-section">
+    <div class="persona-badge badge-maya">🟢 Persona 3 — Maya，21 歲</div>
+    <div class="card" style="margin-bottom:12px;">
+      <div class="persona-header">
+        <div class="avatar avatar-maya"><img src="https://api.dicebear.com/9.x/lorelei/svg?seed=MayaStudent&backgroundColor=e6f4ec&hairColor=1a1a2e&skinColor=f1c27d" alt="Maya"></div>
+        <div style="flex:1;">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px; flex-wrap:wrap;">
+            <div style="font-size:18px; font-weight:600;">Maya，21 歲</div>
+            <span class="tag tag-neutral">學生 / 應屆畢業生</span>
+            <span class="tag tag-neutral">第一個公寓</span>
+            <span class="tag tag-neutral">預算 $120</span>
+          </div>
+          <div style="font-size:12px; color:#9A8E80; margin-bottom:10px;">大四生或剛畢業 · 第一個正式公寓（不是宿舍）· 逛 IKEA、二手市場、舊貨店</div>
+          <div class="quote">「我希望它看起來有品味、不寒酸。但我真的只有 $120。」</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid2" style="margin-bottom:12px;">
+      <div class="card">
+        <div class="section-label">目標</div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; gap:8px;"><span style="color:#3A7A44; margin-top:1px;">✦</span><div style="font-size:12px; line-height:1.6; color:#5A5A5A;">讓房間看起來<strong>有設計感、有意圖</strong> — 不像是湊合出來的</div></div>
+          <div style="display:flex; gap:8px;"><span style="color:#3A7A44; margin-top:1px;">✦</span><div style="font-size:12px; line-height:1.6; color:#5A5A5A;">找到<strong>每件不超過 $30</strong> 的商品 — IKEA、二手都可以</div></div>
+          <div style="display:flex; gap:8px;"><span style="color:#3A7A44; margin-top:1px;">✦</span><div style="font-size:12px; line-height:1.6; color:#5A5A5A;">得到可以<strong>截圖分享</strong>的東西 — TikTok「房間大改造」的感覺</div></div>
+          <div style="display:flex; gap:8px;"><span style="color:#3A7A44; margin-top:1px;">✦</span><div style="font-size:12px; line-height:1.6; color:#5A5A5A;">向自己和朋友證明：<strong>有品味不等於要有錢</strong></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-label">痛點</div>
+        <div class="pain-item"><div class="pain-num">1</div><div><div class="pain-title">什麼都太貴</div><div class="pain-text">AI 工具和「布置改造」內容推薦的東西，永遠超出她的預算</div></div></div>
+        <div class="pain-item"><div class="pain-num">2</div><div><div class="pain-title">有品味但沒有錢實現</div><div class="pain-text">追蹤了對的帳號，知道想要哪種風格 — 就是買不起那些東西</div></div></div>
+        <div class="pain-item"><div class="pain-num">3</div><div><div class="pain-title">逛二手很耗時間</div><div class="pain-text">二手能找到好東西，但要花好幾個小時 — 需要一個採購清單</div></div></div>
+        <div class="pain-item"><div class="pain-num">4</div><div><div class="pain-title">覺得這些工具不是為她設計的</div><div class="pain-text">「這種工具是給有預算的人用的」— 還沒開始就先不信任</div></div></div>
+        <div class="pain-item" style="margin-bottom:0;"><div class="pain-num">5</div><div><div class="pain-title">房間很空，很難拍照</div><div class="pain-text">東西還不多 — 擔心 AI 沒辦法從這麼少的內容推斷出什麼</div></div></div>
+      </div>
+    </div>
+
+    <div class="grid3">
+      <div class="card">
+        <div class="section-label">行為模式</div>
+        <div style="display:flex; flex-direction:column; gap:7px; font-size:12px; color:#5A5A5A; line-height:1.6;">
+          <div>📱 重度 TikTok / Instagram 使用者，追蹤「平價布置」創作者</div>
+          <div>🛒 IKEA + Facebook Marketplace + 舊貨店是她的購物組合</div>
+          <div>📸 在 IG 限定動態分享布置進度</div>
+          <div>⭐ 收藏「平價替代品」文章 — 用便宜的東西達到同樣效果</div>
+          <div>⏳ 慢慢購入 — 有多少錢買多少，一件一件加</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-label">態度光譜</div>
+        <div class="bar-wrap"><div class="bar-label"><span>被動（給我看）</span><span>主動（我自己找）</span></div><div class="bar-bg"><div class="bar-fill bar-fill-maya" style="width:45%;"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>存起來慢慢買</span><span>馬上購買</span></div><div class="bar-bg"><div class="bar-fill bar-fill-maya" style="width:20%;"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>注重預算</span><span>不在乎價格</span></div><div class="bar-bg"><div class="bar-fill bar-fill-maya" style="width:5%;"></div></div></div>
+        <div class="bar-wrap"><div class="bar-label"><span>風格不確定</span><span>有強烈品味</span></div><div class="bar-bg"><div class="bar-fill bar-fill-maya" style="width:65%;"></div></div></div>
+        <div class="bar-wrap" style="margin-bottom:0;"><div class="bar-label"><span>租客限制多</span><span>完全自由</span></div><div class="bar-bg"><div class="bar-fill bar-fill-maya" style="width:25%;"></div></div></div>
+      </div>
+      <div class="card">
+        <div class="section-label">成功的樣子</div>
+        <div class="success-item">拿到真的在 $120 以內的計畫 — 不會有驚嚇到的價格</div>
+        <div class="success-item">看到 IKEA / 二手友善的商品，而不是奢侈品牌</div>
+        <div class="success-item">有一份清單可以分多次購物慢慢蒐集</div>
+        <div class="success-item">用 3 件商品讓房間從「空」變「有設計感」，然後可以分享前後對比</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 比較表 -->
+  <div class="card" style="border-color:#D4C9B8; margin-top:16px;">
+    <div class="section-label">三個 Persona 一覽比較</div>
+    <table class="compare">
+      <thead>
+        <tr>
+          <th></th>
+          <th>🟣 Alex，28 歲</th>
+          <th>🟠 Jordan，26 歲</th>
+          <th>🟢 Maya，21 歲</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>人生階段</td><td>已安頓的租客</td><td>剛搬入新居</td><td>學生 / 剛出社會</td></tr>
+        <tr><td>預算</td><td>$350</td><td>$600</td><td>$120</td></tr>
+        <tr><td>房間現況</td><td>有既有家具，但不搭調</td><td>幾乎空白，全新出發</td><td>稀疏，東西很少</td></tr>
+        <tr><td>風格清晰度</td><td>低 — 說不出來</td><td>非常低 — 空白畫布</td><td>中 — 知道感覺，沒有預算</td></tr>
+        <tr><td>購物時間軸</td><td>數週 / 數月（慢慢來）</td><td>近期 — 空房間很急</td><td>慢慢買 — 預算一次只夠一件</td></tr>
+        <tr><td>最大恐懼</td><td>東西不搭</td><td>選錯風格會後悔</td><td>什麼都買不起</td></tr>
+        <tr><td>主要 CTA</td><td>下載 PDF 留著以後買</td><td>「準備好購買」— 直接連到商品頁</td><td>儲存 / 分享計畫</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ─── 使用者旅程地圖 ─── -->
+<div class="section">
+  <div class="section-title">使用者旅程地圖 — 共用流程 + 各 Persona 標注</div>
+  <div style="font-size:12px; color:#9A8E80; margin-bottom:8px;">三個 Persona 走相同的 7 個階段。標注列顯示各 Persona 在情緒、痛點或需求上的差異。</div>
+
+  <div style="display:flex; gap:16px; margin-bottom:14px; flex-wrap:wrap;">
+    <div style="display:flex; align-items:center; gap:6px; font-size:11px;"><span style="width:10px; height:10px; border-radius:50%; background:#8B7EC8; display:inline-block;"></span> Alex — 現有租客</div>
+    <div style="display:flex; align-items:center; gap:6px; font-size:11px;"><span style="width:10px; height:10px; border-radius:50%; background:#C17A4A; display:inline-block;"></span> Jordan — 新搬入者</div>
+    <div style="display:flex; align-items:center; gap:6px; font-size:11px;"><span style="width:10px; height:10px; border-radius:50%; background:#7A9E7E; display:inline-block;"></span> Maya — 學生</div>
+  </div>
+
+  <div class="jm-wrap">
+    <table class="jm">
+      <thead>
+        <tr>
+          <th style="width:100px;"></th>
+          <th><span class="stage-dot" style="background:#8B7EC8;"></span>1 · 觸發</th>
+          <th><span class="stage-dot" style="background:#C17A4A;"></span>2 · 發現</th>
+          <th><span class="stage-dot" style="background:#4A7BA3;"></span>3 · 上傳照片</th>
+          <th><span class="stage-dot" style="background:#7A9E7E;"></span>4 · 選風格</th>
+          <th><span class="stage-dot" style="background:#C17A4A;"></span>5 · AI 運作</th>
+          <th><span class="stage-dot" style="background:#8B5E8A;"></span>6 · 查看結果</th>
+          <th><span class="stage-dot" style="background:#3D7A6A;"></span>7 · 儲存匯出</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 行動 -->
+        <tr>
+          <td class="row-label">用戶行動</td>
+          <td>感覺房間哪裡不對勁 — 決定終於要做點什麼</td>
+          <td>發現 Moodboard（Instagram、口耳相傳）。進入首頁。</td>
+          <td>用手機拍 2–3 張照片，上傳。看到縮圖確認上傳成功。</td>
+          <td>設定預算。滑動視覺風格圖卡。點選喜歡的。全程不需要打字。</td>
+          <td>看到動畫進度：「解讀你的空間… 搜尋網路… 找到 8 件符合商品…」</td>
+          <td>看到推薦商品卡片，以及商品合成進真實房間的照片。確認累計預算。標記喜歡的。</td>
+          <td>下載合成後的房間照片 + 完整購物清單（PDF）。分享前後對比。</td>
+        </tr>
+
+        <!-- 各 Persona 心聲 -->
+        <tr class="callout-row" style="background:#F5F3FA;">
+          <td class="row-label-persona" style="color:#5A4A9A;">🟣 Alex 心想</td>
+          <td class="p-alex"><em>「花了錢，但房間還是哪裡不對。」</em></td>
+          <td class="p-alex"><em>「只要上傳照片？不用自己描述？」</em></td>
+          <td class="p-alex"><em>「希望照片夠清楚。要不要先整理一下？」</em></td>
+          <td class="p-alex"><em>「我喜歡這張。我不需要知道它叫什麼風格。」</em></td>
+          <td class="p-alex"><em>「它真的在搜尋符合我房間的商品。」</em></td>
+          <td class="p-alex"><em>「等等 — 那是我的房間，但放進新東西之後看起來完全不一樣。」</em></td>
+          <td class="p-alex"><em>「我還不打算買，但我現在能看到放進去的樣子了。」</em></td>
+        </tr>
+        <tr class="callout-row" style="background:#FEF8F0;">
+          <td class="row-label-persona" style="color:#9A5A1A;">🟠 Jordan 心想</td>
+          <td class="p-jordan"><em>「房間就是空的。我甚至不知道自己想要什麼風格。」</em></td>
+          <td class="p-jordan"><em>「我還沒有家具，這個工具有用嗎？」</em></td>
+          <td class="p-jordan"><em>「我幾乎沒什麼東西可以拍。這樣也行嗎？」</em></td>
+          <td class="p-jordan"><em>「我需要確定一個方向。但萬一選錯了呢？」</em></td>
+          <td class="p-jordan"><em>「它在即時搜尋網路上的真實商品？」</em></td>
+          <td class="p-jordan"><em>「我能看到空房間放了這些東西之後的樣子。這正是我需要的。」</em></td>
+          <td class="p-jordan"><em>「我這個週末要買前三件。看得到效果了，有信心了。」</em></td>
+        </tr>
+        <tr class="callout-row" style="background:#F0F8F2;">
+          <td class="row-label-persona" style="color:#2A7A44;">🟢 Maya 心想</td>
+          <td class="p-maya"><em>「我希望它看起來像真正的公寓，不像宿舍。」</em></td>
+          <td class="p-maya"><em>「希望不要推薦我買不起的東西。」</em></td>
+          <td class="p-maya"><em>「我的房間很空，AI 有辦法根據這個推斷嗎？」</em></td>
+          <td class="p-maya"><em>「我要先設定預算，不然浪費我時間。」</em></td>
+          <td class="p-maya"><em>「拜託都是 $30 以內的東西。拜託。」</em></td>
+          <td class="p-maya"><em>「天啊 — 那是我的房間，但看起來完全不一樣。而且全部在 $120 以內？」</em></td>
+          <td class="p-maya"><em>「傳到限定動態。這就是我的房間大改造紀錄。」</em></td>
+        </tr>
+
+        <!-- 情緒 -->
+        <tr>
+          <td class="row-label">情緒</td>
+          <td style="text-align:center;"><span class="em">😩</span><span class="em-label">沮喪</span></td>
+          <td style="text-align:center;"><span class="em">🤔</span><span class="em-label">好奇</span></td>
+          <td style="text-align:center;"><span class="em">😅</span><span class="em-label">有點緊張</span></td>
+          <td style="text-align:center;"><span class="em">😌</span><span class="em-label">放鬆投入</span></td>
+          <td style="text-align:center;"><span class="em">😯</span><span class="em-label">期待</span></td>
+          <td style="text-align:center;"><span class="em">🤩</span><span class="em-label">驚喜</span></td>
+          <td style="text-align:center;"><span class="em">😊</span><span class="em-label">有自信</span></td>
+        </tr>
+
+        <!-- 痛點 -->
+        <tr>
+          <td class="row-label">痛點</td>
+          <td><span class="tag tag-pain">沒有起點</span> 知道哪裡不對，但說不清楚問題在哪</td>
+          <td><span class="tag tag-pain">信任障礙</span> 「又一個 AI 噱頭？」— 需要在三秒內建立信任感</td>
+          <td><span class="tag tag-pain">照片焦慮</span> 擔心照片太亂或太空，AI 會看不出什麼</td>
+          <td><span class="tag tag-pain">選擇障礙</span> 選項太多容易當機。先設定預算對 Maya 特別重要。</td>
+          <td><span class="tag tag-pain">等待煎熬</span> 網路搜尋需要時間 — 沒有進度反饋的等待特別難熬</td>
+          <td><span class="tag tag-pain">現實落差</span> 「這些商品放在我的房間真的好看嗎？」— 合成照片直接解決這個疑慮</td>
+          <td><span class="tag tag-pain">下一步不明</span> 有了計畫和照片，但不知道接下來該怎麼做</td>
+        </tr>
+
+        <!-- 設計機會 -->
+        <tr class="opp-row">
+          <td class="row-label">設計機會</td>
+          <td><span class="tag tag-opp">首頁文案</span> 主打不搭調的痛：「你的家具各說各話。」Jordan / Maya 需要副標題照顧到他們的情況。</td>
+          <td><span class="tag tag-opp">社會驗證</span> 首頁三秒內展示真實的布置前後對比</td>
+          <td><span class="tag tag-opp">拍照提示</span> 展示「夠好用」的範例照片 — 亂一點也沒關係。加入「我從空房開始」選項給 Jordan / Maya。</td>
+          <td><span class="tag tag-insight">★ 關鍵 UX 決策</span> 預算設定滑桿要在風格圖卡之前出現。8–12 張真實房間照片供點選，不需要打字。AI 從點選推斷風格。</td>
+          <td><span class="tag tag-opp">動態進度</span> 展示具體步驟：「解讀你的空間… 搜尋網路… 找到 8 件符合商品…」— 讓等待感覺有意義</td>
+          <td><span class="tag tag-insight">★ 情感高峰</span> 分割畫面：合成後的房間照片在上（用戶的真實空間改造版）+ 商品卡在下。Alex 看到風格符合度 %；Jordan 看到購買優先順序；Maya 預算金額放最大最前面。</td>
+          <td><span class="tag tag-opp">可分享輸出</span> 匯出 = 合成照片 + 購物清單成一份 PDF。Alex：寄給我。Jordan：購買連結優先。Maya：分享成圖片（前後對比）。</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ─── 設計原則 ─── -->
+<div class="section">
+  <div class="section-title">核心設計原則</div>
+  <div class="grid3">
+    <div class="principle">
+      <div class="principle-title">1 — 視覺呈現，不要叫用戶描述</div>
+      <div class="principle-body">用戶說不清楚自己想要什麼。所有輸入必須是視覺的、即時反應的 — 任何地方都不能出現開放式文字框。預算用滑桿設定，不用表單填寫。</div>
+    </div>
+    <div class="principle">
+      <div class="principle-title">2 — 整體感是核心承諾</div>
+      <div class="principle-body">用戶的核心痛苦是「不搭調」。每張商品卡片都要強調「這些放在一起很好看」— 不只是個別推薦。Alex 看風格符合度 %；Jordan 用入門套件的框架呈現。</div>
+    </div>
+    <div class="principle">
+      <div class="principle-title">3 — 儲存計畫是真正的轉換點</div>
+      <div class="principle-body">這三個 Persona 都不會在第一次使用時立刻購買。合成照片 + PDF 匯出 / 分享才是真正的轉換時刻。「立即購買」連結是次要的，放在商品卡片內部。</div>
+    </div>
+  </div>
+</div>
+
+<div style="font-size:11px; color:#C8BCA8; text-align:center; margin-top:8px;">Moodboard · Cascadia AI Hackathon 2026 · UX 研究文件 · Dianne Ting</div>
+
+</body>
+</html>

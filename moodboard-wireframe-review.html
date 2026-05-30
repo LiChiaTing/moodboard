@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Moodboard — Wireframe + UX Review</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #f0f0f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #222; }
+
+  .page-header {
+    background: #1a1a2e; color: white;
+    padding: 20px 40px; position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .page-header h1 { font-size: 16px; font-weight: 700; }
+  .page-header p { font-size: 11px; color: #aaa; }
+  .badge { background: #7b61ff; color: white; font-size: 10px; padding: 3px 10px; border-radius: 20px; font-weight: 600; }
+
+  .steps-nav {
+    background: white; border-bottom: 1px solid #e8e8e8;
+    display: flex; padding: 0 40px; overflow-x: auto;
+  }
+  .steps-nav a {
+    padding: 12px 20px; font-size: 11px; color: #999;
+    text-decoration: none; border-bottom: 2px solid transparent; white-space: nowrap;
+  }
+  .steps-nav a:hover { color: #7b61ff; }
+
+  .canvas {
+    max-width: 1200px; margin: 40px auto;
+    padding: 0 40px 80px;
+    display: flex; flex-direction: column; gap: 60px;
+  }
+
+  .step-block { display: flex; flex-direction: column; gap: 0; }
+  .step-label { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .step-num {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 800; color: white; flex-shrink: 0;
+  }
+  .step-label h2 { font-size: 15px; font-weight: 700; }
+  .step-label p { font-size: 11px; color: #999; margin-top: 2px; }
+
+  .frame {
+    background: white; border-radius: 16px; overflow: hidden;
+    box-shadow: 0 2px 16px rgba(0,0,0,.08); border: 1px solid #e8e8e8;
+  }
+
+  .app-bar {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 20px; color: white;
+  }
+  .app-bar .step-bubble {
+    width: 28px; height: 28px; border-radius: 7px;
+    background: rgba(255,255,255,.25);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 13px;
+  }
+  .app-bar .title { font-size: 14px; font-weight: 700; }
+  .app-bar .sub { font-size: 10px; opacity: .75; margin-top: 1px; }
+
+  .progress-bar { height: 4px; background: #e0dcff; }
+  .progress-fill { height: 100%; background: #7b61ff; }
+
+  .section-content { padding: 24px 20px; }
+  .label { font-size: 12px; font-weight: 700; color: #222; margin-bottom: 4px; }
+  .sublabel { font-size: 10px; color: #999; margin-bottom: 10px; }
+  .divider { height: 1px; background: #f0f0f0; margin: 16px 0; }
+
+  /* Review banners */
+  .ux-review {
+    border-radius: 12px; padding: 16px 20px;
+    margin-bottom: 16px; font-size: 9.5px; line-height: 1.8;
+  }
+  .ux-review.issue { background: #fff0f0; border: 1.5px solid #ffb3b3; }
+  .ux-review.ok    { background: #f0fff4; border: 1.5px solid #86efac; }
+  .ux-review-title { font-size: 10px; font-weight: 800; margin-bottom: 8px; }
+  .ux-review.issue .ux-review-title { color: #c0392b; }
+  .ux-review.ok    .ux-review-title { color: #16a34a; }
+  .ux-item { display: flex; gap: 8px; margin-bottom: 5px; }
+
+  /* Add callout */
+  .add-callout {
+    border: 1.5px dashed #ff9f40; border-radius: 10px;
+    background: #fffaf0; padding: 10px 14px; margin: 10px 0;
+    font-size: 9px; color: #888;
+  }
+  .add-callout strong { color: #c47a1a; display: block; margin-bottom: 3px; font-size: 9.5px; }
+
+  /* Step 1 */
+  .drop-zone {
+    border: 1.5px dashed #c5c0f0; border-radius: 12px;
+    background: #f6f5ff;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 36px 20px; gap: 8px;
+  }
+  .drop-icon { width: 72px; height: 56px; background: #ede9ff; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 28px; }
+  .drop-title { font-size: 12px; font-weight: 700; color: #7b61ff; }
+  .drop-or { font-size: 10px; color: #bbb; }
+  .btn-browse { background: #7b61ff; color: white; border: none; border-radius: 20px; padding: 8px 20px; font-size: 10px; font-weight: 600; cursor: pointer; }
+  .drop-hint { font-size: 9px; color: #bbb; }
+
+  .thumb-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 20px; }
+  .thumb { border-radius: 10px; overflow: hidden; position: relative; aspect-ratio: 1; }
+  .thumb-img { width: 100%; height: 100%; background: #ccc; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #888; }
+  .thumb-img.empty { background: #fafafa; border: 1.2px dashed #e0e0e0; color: #ccc; font-size: 28px; flex-direction: column; gap: 4px; }
+  .thumb-img.empty span { font-size: 9px; }
+  .check-badge { position: absolute; top: 6px; left: 6px; width: 20px; height: 20px; border-radius: 50%; background: #22c55e; color: white; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
+  .del-badge { position: absolute; top: 6px; right: 6px; width: 20px; height: 20px; border-radius: 50%; background: #ff4d4d; color: white; display: flex; align-items: center; justify-content: center; font-size: 11px; cursor: pointer; }
+  .annotation-select { width: 100%; border: 1.2px solid #c5c0f0; border-radius: 6px; padding: 5px 10px; font-size: 9.5px; color: #7b61ff; background: white; margin-top: 6px; font-weight: 600; }
+  .annotation-select.empty { color: #bbb; font-weight: 400; }
+  .tip-box { background: #fffbe8; border: 1px solid #f0e080; border-radius: 8px; padding: 12px 14px; margin-top: 16px; }
+  .tip-box .tip-title { font-size: 9.5px; font-weight: 700; color: #888; margin-bottom: 4px; }
+  .tip-box p { font-size: 9px; color: #999; line-height: 1.6; }
+
+  .cta { width: 100%; padding: 14px; background: #7b61ff; color: white; border: none; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; text-align: center; }
+  .foot-note { text-align: center; font-size: 8.5px; color: #ccc; margin-top: 8px; }
+  .back-link { text-align: center; font-size: 9.5px; color: #aaa; margin-top: 10px; }
+
+  /* Step 2 */
+  .budget-row { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+  .slider-wrap { flex: 1; position: relative; }
+  .slider-track { height: 6px; background: #e0dcff; border-radius: 3px; position: relative; }
+  .slider-fill { height: 100%; background: #7b61ff; border-radius: 3px; width: 46%; }
+  .slider-thumb { width: 20px; height: 20px; border-radius: 50%; background: #7b61ff; border: 2.5px solid white; box-shadow: 0 0 0 2px #7b61ff; position: absolute; top: -7px; left: 46%; }
+  .slider-labels { display: flex; justify-content: space-between; font-size: 9px; color: #aaa; margin-top: 6px; }
+  .num-input { border: 1.2px solid #c5c0f0; border-radius: 8px; padding: 8px 12px; font-size: 13px; font-weight: 600; width: 110px; text-align: center; color: #333; }
+  .ai-badge { display: inline-flex; align-items: center; gap: 4px; background: #ede9ff; color: #7b61ff; font-size: 9px; padding: 4px 12px; border-radius: 20px; margin-bottom: 10px; }
+
+  .style-tile-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .style-tile { border-radius: 10px; overflow: hidden; border: 2px solid #e0e0e0; cursor: pointer; }
+  .style-tile.selected { border-color: #7b61ff; }
+  .style-tile-img { height: 72px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: rgba(255,255,255,.6); }
+  .style-tile-info { padding: 6px 8px; background: white; }
+  .style-tile-name { font-size: 9.5px; font-weight: 700; color: #333; }
+  .style-tile-sub { font-size: 8px; color: #aaa; }
+  .style-tile.selected .style-tile-info { background: #f0eeff; }
+  .style-tile.selected .style-tile-name { color: #7b61ff; }
+  .style-tile-selected-bar { background: #7b61ff; text-align: center; padding: 3px; font-size: 8px; color: white; font-weight: 700; }
+
+  .summary-box { background: #f0eeff; border: 1px solid #c5c0f0; border-radius: 10px; padding: 14px 16px; margin: 16px 0; }
+  .summary-box .summary-title { font-size: 10px; font-weight: 700; color: #7b61ff; margin-bottom: 8px; }
+  .summary-row { font-size: 9.5px; color: #555; margin-bottom: 5px; }
+
+  /* Step 3 */
+  .loading-screen { background: linear-gradient(160deg, #f4f3ff 0%, #fff 60%); padding: 48px 20px; display: flex; flex-direction: column; align-items: center; gap: 20px; min-height: 380px; justify-content: center; }
+  .spinner-ring { width: 64px; height: 64px; border-radius: 50%; border: 4px solid #e0dcff; border-top-color: #7b61ff; animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-title { font-size: 18px; font-weight: 800; color: #2d2d5e; }
+  .loading-sub { font-size: 11px; color: #999; }
+  .loading-steps { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 360px; }
+  .loading-step { display: flex; align-items: center; gap: 10px; font-size: 10px; padding: 10px 14px; border-radius: 8px; background: white; border: 1px solid #e8e8e8; }
+  .loading-step .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dot-done { background: #22c55e; }
+  .dot-active { background: #7b61ff; animation: pulse .8s ease infinite alternate; }
+  .dot-pending { background: #e0e0e0; }
+  @keyframes pulse { to { opacity: .4; } }
+  .loading-step.done { color: #555; }
+  .loading-step.active { color: #7b61ff; font-weight: 600; border-color: #c5c0f0; }
+  .loading-step.pending { color: #bbb; }
+
+  /* Step 4 */
+  .result-layout { display: grid; grid-template-columns: 1fr 380px; min-height: 600px; }
+  .result-left { padding: 20px; border-right: 1px solid #f0f0f0; display: flex; flex-direction: column; gap: 14px; }
+  .result-right { padding: 20px; background: #fafafa; display: flex; flex-direction: column; gap: 14px; }
+
+  .composited-photo { border-radius: 12px; background: #c8c8c8; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; position: relative; }
+  .photo-label { position: absolute; top: 10px; left: 10px; background: rgba(45,45,94,.8); color: white; font-size: 8.5px; padding: 3px 10px; border-radius: 20px; font-weight: 600; }
+  .composited-photo p { color: rgba(255,255,255,.65); font-size: 11px; }
+  .composited-photo small { color: rgba(255,255,255,.4); font-size: 9px; }
+
+  .placed-items { display: flex; gap: 8px; flex-wrap: wrap; }
+  .placed-chip { display: flex; align-items: center; gap: 6px; background: white; border: 1px solid #e0e0e0; border-radius: 20px; padding: 4px 10px 4px 6px; font-size: 9px; color: #555; }
+  .placed-chip-img { width: 22px; height: 22px; border-radius: 50%; background: #ddd; flex-shrink: 0; }
+  .swap-link { color: #7b61ff; font-size: 8.5px; margin-left: 4px; cursor: pointer; }
+
+  .pick-card { background: white; border: 1.2px solid #e8e8e8; border-radius: 12px; overflow: hidden; display: flex; }
+  .pick-card-img { width: 88px; flex-shrink: 0; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #aaa; position: relative; }
+  .pick-match { position: absolute; bottom: 4px; left: 4px; background: #22c55e; color: white; font-size: 7.5px; font-weight: 700; padding: 2px 6px; border-radius: 20px; }
+  .pick-info { padding: 10px 12px; flex: 1; }
+  .pick-name { font-size: 10px; font-weight: 700; color: #222; margin-bottom: 2px; }
+  .pick-store { font-size: 8.5px; color: #aaa; margin-bottom: 6px; }
+  .pick-price { font-size: 14px; font-weight: 800; color: #2d2d5e; }
+  .pick-why { font-size: 8.5px; color: #7b61ff; margin-top: 4px; font-style: italic; }
+  .pick-actions { display: flex; gap: 6px; margin-top: 8px; align-items: center; }
+  .btn-swap-sm { font-size: 8.5px; color: #999; background: none; border: 1px solid #e0e0e0; border-radius: 6px; padding: 4px 8px; cursor: pointer; }
+  .pick-check { width: 20px; height: 20px; border-radius: 50%; background: #22c55e; color: white; display: flex; align-items: center; justify-content: center; font-size: 10px; margin-left: auto; flex-shrink: 0; }
+  .sl-link { font-size: 8.5px; color: #7b61ff; text-decoration: none; }
+
+  .total-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #2d2d5e; border-radius: 8px; color: white; }
+  .total-label { font-size: 10px; font-weight: 600; }
+  .total-amount { font-size: 15px; font-weight: 800; }
+  .action-row { display: flex; gap: 8px; }
+  .btn-dl { flex: 1; padding: 10px; border-radius: 8px; background: #7b61ff; color: white; font-size: 10px; font-weight: 700; border: none; cursor: pointer; text-align: center; }
+  .btn-share { padding: 10px 16px; border-radius: 8px; background: white; color: #7b61ff; font-size: 10px; font-weight: 700; border: 1.2px solid #7b61ff; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div>
+    <h1>Moodboard — Wireframe + UX Review</h1>
+    <p>Original wireframe annotated against research doc · Issues flagged inline · v0.5</p>
+  </div>
+  <span class="badge">Review by Dianne</span>
+</div>
+
+<nav class="steps-nav">
+  <a href="#s1">① Upload Photos</a>
+  <a href="#s2">② Style &amp; Budget</a>
+  <a href="#s3">③ Analyzing…</a>
+  <a href="#s4">④ Your Moodboard</a>
+  <a href="#summary">Summary</a>
+</nav>
+
+<div class="canvas">
+
+  <!-- ══ STEP 1 ══ -->
+  <div class="step-block" id="s1">
+    <div class="step-label">
+      <div class="step-num" style="background:#7b61ff;">1</div>
+      <div><h2>Upload Photos</h2><p>Drop zone · Thumbnails · Tips</p></div>
+    </div>
+
+    <div class="ux-review ok">
+      <div class="ux-review-title">✅ Step 1 mostly solid</div>
+      <div class="ux-item"><span>✅</span>&nbsp; Drop zone + browse button — low friction, clear</div>
+      <div class="ux-item"><span>✅</span>&nbsp; Thumbnail grid with check/delete — good upload confirmation</div>
+      <div class="ux-item"><span>✅</span>&nbsp; Shooting tips — directly addresses "photo anxiety" from research</div>
+      <div class="ux-item"><span>⚠️</span>&nbsp; <strong>Missing: "I'm starting fresh" option.</strong> Jordan (new mover) and Maya (sparse room) may have little or nothing to photograph. Without a skip option, they feel blocked at step 1.</div>
+    </div>
+
+    <div class="frame">
+      <div class="app-bar" style="background:#7b61ff;">
+        <div class="step-bubble">1</div>
+        <div><div class="title">Upload photos of your space</div><div class="sub">At least 1 photo required · or skip if starting fresh</div></div>
+      </div>
+      <div class="section-content">
+        <div class="drop-zone">
+          <div class="drop-icon">📷</div>
+          <div class="drop-title">Drag &amp; drop your photos here</div>
+          <div class="drop-or">or</div>
+          <button class="btn-browse">Browse photos</button>
+          <div class="drop-hint">JPG · PNG · Max 10MB per photo</div>
+        </div>
+
+        <div class="add-callout">
+          <strong>⚠️ Add this — "starting fresh" skip option</strong>
+          Moving into an empty space? &nbsp;<span style="color:#7b61ff;font-weight:600;">Skip — I'm starting from scratch →</span>
+        </div>
+
+        <div class="thumb-grid">
+          <div>
+            <div class="thumb"><div class="thumb-img">Living room</div><div class="check-badge">✓</div><div class="del-badge">×</div></div>
+            <select class="annotation-select"><option>🛋 Living room</option></select>
+          </div>
+          <div>
+            <div class="thumb"><div class="thumb-img">Corner detail</div><div class="check-badge">✓</div><div class="del-badge">×</div></div>
+            <select class="annotation-select empty"><option value="">Label this space (optional)</option></select>
+          </div>
+          <div><div class="thumb"><div class="thumb-img empty">+<span>Add photo</span></div></div></div>
+          <div><div class="thumb"><div class="thumb-img empty">+<span>Add photo</span></div></div></div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-title">💡 Shooting tips</div>
+          <p>Daylight photos work best · Wide-angle shot recommended · Close-ups help AI detect textures · Messy is fine — AI doesn't judge.</p>
+        </div>
+        <div style="margin-top:20px;">
+          <button class="cta">Next: Pick your style →</button>
+          <div class="foot-note">2 photos uploaded</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STEP 2 ══ -->
+  <div class="step-block" id="s2">
+    <div class="step-label">
+      <div class="step-num" style="background:#7b61ff;">2</div>
+      <div><h2>Style &amp; Budget</h2><p>2 critical issues · Redesign needed</p></div>
+    </div>
+
+    <div class="ux-review issue">
+      <div class="ux-review-title">🚨 Step 2 has 2 critical issues — must fix before engineering handoff</div>
+      <div class="ux-item"><span>🚨</span>&nbsp; <strong>Section A (open text box) must be removed.</strong> Design principle #1 = no text prompt, ever. Alex can't articulate what they want. Jordan doesn't know what they want. A text box breaks the entire value proposition of this product.</div>
+      <div class="ux-item"><span>🚨</span>&nbsp; <strong>Style section uses text name tags (Scandinavian, Japandi…) — replace with visual photo tiles.</strong> Users shouldn't need to know interior design vocabulary. Show 8–12 real room photos and let them tap what feels right. AI infers the style.</div>
+      <div class="ux-item"><span>⚠️</span>&nbsp; <strong>Budget must move to the top</strong>, before style tiles. Maya has a $120 cap — if she picks style first and then hits budget constraints, she loses trust immediately.</div>
+      <div class="ux-item"><span>✅</span>&nbsp; Color mood tiles (Section C) are the right pattern — visual, tappable, no labels required. Apply this same logic to the style section.</div>
+      <div class="ux-item"><span>✅</span>&nbsp; Budget slider + AI suggestion ("AI suggests $200–$350") — keep exactly this.</div>
+    </div>
+
+    <div class="frame">
+      <div class="app-bar" style="background:#7b61ff;">
+        <div class="step-bubble">2</div>
+        <div><div class="title">Set your budget &amp; style</div><div class="sub">No typing needed — just tap what feels right</div></div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:40%"></div></div>
+      <div style="text-align:center;font-size:8.5px;color:#aaa;padding:4px 0;">Step 2 of 4</div>
+      <div class="section-content">
+
+        <!-- A: BUDGET FIRST -->
+        <div class="label">A &nbsp; What's your budget?</div>
+        <div class="ai-badge">✦ AI suggests $200–$350 &nbsp;<span style="color:#aaa;font-size:8px;">based on your photo</span></div>
+        <div class="budget-row">
+          <div class="slider-wrap">
+            <div class="slider-track"><div class="slider-fill"></div><div class="slider-thumb"></div></div>
+            <div class="slider-labels"><span>$50</span><span>$5,000</span></div>
+          </div>
+          <div class="num-input">$280</div>
+          <span style="font-size:10px;color:#aaa;">USD</span>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- B: STYLE — visual tiles replacing text tags -->
+        <div class="label">B &nbsp; Which rooms feel right to you?</div>
+        <div class="sublabel">Tap up to 3 — AI figures out your style from your picks. No need to know style names.</div>
+
+        <div class="add-callout">
+          <strong>⚠️ Replace text tag chips with these photo tiles</strong>
+          Real room photos (8–12 options). No style names shown. Descriptive labels only (e.g. "Warm &amp; minimal", not "Japandi").
+        </div>
+
+        <div class="style-tile-grid">
+          <div class="style-tile selected">
+            <div class="style-tile-img" style="background:linear-gradient(135deg,#f0ebe0,#d4c8b0);">Room photo</div>
+            <div class="style-tile-info"><div class="style-tile-name">Warm &amp; minimal</div><div class="style-tile-sub">Light wood · Linen · Calm</div></div>
+            <div class="style-tile-selected-bar">✓ Selected</div>
+          </div>
+          <div class="style-tile">
+            <div class="style-tile-img" style="background:linear-gradient(135deg,#e0e8e0,#c0d0c0);">Room photo</div>
+            <div class="style-tile-info"><div class="style-tile-name">Natural &amp; earthy</div><div class="style-tile-sub">Plants · Rattan · Soft green</div></div>
+          </div>
+          <div class="style-tile">
+            <div class="style-tile-img" style="background:linear-gradient(135deg,#2a2a3a,#4a4a5a);">Room photo</div>
+            <div class="style-tile-info"><div class="style-tile-name">Dark &amp; moody</div><div class="style-tile-sub">Charcoal · Brass · Velvet</div></div>
+          </div>
+          <div class="style-tile">
+            <div class="style-tile-img" style="background:linear-gradient(135deg,#f8f8f8,#e0e0e0);">Room photo</div>
+            <div class="style-tile-info"><div class="style-tile-name">Clean &amp; white</div><div class="style-tile-sub">All-white · Bright · Simple</div></div>
+          </div>
+          <div class="style-tile selected">
+            <div class="style-tile-img" style="background:linear-gradient(135deg,#e8c4a0,#c09070);">Room photo</div>
+            <div class="style-tile-info"><div class="style-tile-name">Warm &amp; boho</div><div class="style-tile-sub">Terracotta · Texture · Layers</div></div>
+            <div class="style-tile-selected-bar">✓ Selected</div>
+          </div>
+          <div class="style-tile">
+            <div class="style-tile-img" style="background:linear-gradient(135deg,#c8d4e0,#9ab0c8);">Room photo</div>
+            <div class="style-tile-info"><div class="style-tile-name">Cool &amp; coastal</div><div class="style-tile-sub">Blue-grey · Linen · Airy</div></div>
+          </div>
+        </div>
+        <div style="text-align:right;font-size:9px;color:#7b61ff;margin-top:8px;font-weight:600;">2 of 3 selected</div>
+
+        <div class="divider"></div>
+
+        <!-- C: Color — keep this, it's good -->
+        <div class="label">C &nbsp; Color mood <span style="font-size:9px;font-weight:400;color:#aaa;">(optional)</span></div>
+        <div class="sublabel">Pick one that feels closest</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
+          <div style="border-radius:10px;overflow:hidden;border:2.5px solid #7b61ff;cursor:pointer;">
+            <div style="height:48px;background:linear-gradient(135deg,#f5e6d3,#e8d5b7,#d4b896);"></div>
+            <div style="padding:6px 8px;background:white;"><div style="font-size:9px;font-weight:700;color:#333;">Warm Neutrals</div><div style="font-size:8px;color:#aaa;">Beige · Cream · Tan</div></div>
+            <div style="background:#7b61ff;text-align:center;padding:3px;font-size:8px;color:white;font-weight:700;">✓ Selected</div>
+          </div>
+          <div style="border-radius:10px;overflow:hidden;border:1.5px solid #e0e0e0;cursor:pointer;">
+            <div style="height:48px;background:linear-gradient(135deg,#d4e8e0,#b8d4c8,#9bc4b8);"></div>
+            <div style="padding:6px 8px;background:white;"><div style="font-size:9px;font-weight:700;color:#333;">Cool Neutrals</div><div style="font-size:8px;color:#aaa;">Sage · Slate · Grey</div></div>
+          </div>
+          <div style="border-radius:10px;overflow:hidden;border:1.5px solid #e0e0e0;cursor:pointer;">
+            <div style="height:48px;background:linear-gradient(135deg,#e8c4a0,#d4956c,#c06840);"></div>
+            <div style="padding:6px 8px;background:white;"><div style="font-size:9px;font-weight:700;color:#333;">Bold &amp; Saturated</div><div style="font-size:8px;color:#aaa;">Terracotta · Rust · Ochre</div></div>
+          </div>
+          <div style="border-radius:10px;overflow:hidden;border:1.5px solid #e0e0e0;cursor:pointer;">
+            <div style="height:48px;background:linear-gradient(135deg,#f0f0f0,#c8c8c8,#404040);"></div>
+            <div style="padding:6px 8px;background:white;"><div style="font-size:9px;font-weight:700;color:#333;">Black &amp; White</div><div style="font-size:8px;color:#aaa;">Monochrome · Contrast</div></div>
+          </div>
+        </div>
+
+        <div class="summary-box" style="margin-top:16px;">
+          <div class="summary-title">Ready to analyze</div>
+          <div class="summary-row">🎨 Style &nbsp;&nbsp;&nbsp;&nbsp; Warm minimal · Warm boho</div>
+          <div class="summary-row">🎨 Colors &nbsp;&nbsp;&nbsp; Warm Neutrals</div>
+          <div class="summary-row">💰 Budget &nbsp;&nbsp; $280 USD</div>
+        </div>
+        <button class="cta">Analyze my space →</button>
+        <div class="back-link">← Back to photos</div>
+        <div class="foot-note">AI will analyze your photo and search the web for matching products — takes ~15 seconds</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STEP 3 ══ -->
+  <div class="step-block" id="s3">
+    <div class="step-label">
+      <div class="step-num" style="background:#e86a2e;">3</div>
+      <div><h2>AI Analyzing…</h2><p>Loading screen — reads photo + searches web</p></div>
+    </div>
+
+    <div class="ux-review ok">
+      <div class="ux-review-title">✅ Step 3 is solid — minor addition needed</div>
+      <div class="ux-item"><span>✅</span>&nbsp; Animated step-by-step progress — kills "dead time" feeling perfectly</div>
+      <div class="ux-item"><span>✅</span>&nbsp; "Searching IKEA, Wayfair &amp; Amazon…" — confirms web search is happening (core product feature)</div>
+      <div class="ux-item"><span>✅</span>&nbsp; Specific labels, not a generic spinner</div>
+      <div class="ux-item"><span>⚠️</span>&nbsp; <strong>Add a final step: "Compositing your room photo…"</strong> — this is the most exciting feature. Users should know it's happening during the wait, not be surprised at the result.</div>
+    </div>
+
+    <div class="frame">
+      <div class="app-bar" style="background:#e86a2e;">
+        <div class="step-bubble">3</div>
+        <div><div class="title">Finding your perfect pieces</div><div class="sub">Sit tight — about 15 seconds</div></div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:60%;background:#e86a2e;"></div></div>
+      <div class="loading-screen">
+        <div class="spinner-ring" style="border-color:#ffe0d0;border-top-color:#e86a2e;"></div>
+        <div class="loading-title">Analyzing your space</div>
+        <div class="loading-sub">Reading your room and searching across stores</div>
+        <div class="loading-steps">
+          <div class="loading-step done"><div class="dot dot-done"></div>Photo uploaded &amp; received</div>
+          <div class="loading-step done"><div class="dot dot-done"></div>Detecting style, colors &amp; existing furniture</div>
+          <div class="loading-step active"><div class="dot dot-active"></div>Searching IKEA, Wayfair &amp; Amazon…</div>
+          <div class="loading-step pending"><div class="dot dot-pending"></div>Ranking products by style match &amp; budget</div>
+          <div class="loading-step pending" style="border-color:#ff9f40;background:#fffaf0;">
+            <div class="dot" style="background:#ff9f40;"></div>
+            <span>Compositing picks into your room photo <span style="font-size:8px;color:#c47a1a;font-weight:700;">← Add this step</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STEP 4 ══ -->
+  <div class="step-block" id="s4">
+    <div class="step-label">
+      <div class="step-num" style="background:#2d2d5e;">4</div>
+      <div><h2>Your Moodboard</h2><p>The strongest screen — mostly keep</p></div>
+    </div>
+
+    <div class="ux-review ok">
+      <div class="ux-review-title">✅ Step 4 is the best screen — keep almost everything</div>
+      <div class="ux-item"><span>✅</span>&nbsp; Composited photo left + product list right — exactly right layout priority</div>
+      <div class="ux-item"><span>✅</span>&nbsp; Before/after toggle — directly solves the "reality gap" pain point</div>
+      <div class="ux-item"><span>✅</span>&nbsp; "Why this fits" italic on each card — addresses cohesion doubt</div>
+      <div class="ux-item"><span>✅</span>&nbsp; Running budget total vs cap — addresses budget blind spot</div>
+      <div class="ux-item"><span>✅</span>&nbsp; Swap per item — control without starting over</div>
+      <div class="ux-item"><span>✅</span>&nbsp; PDF contents list before download — sets expectations correctly</div>
+      <div class="ux-item"><span>✅</span>&nbsp; Match % badge (98%, 94%) — builds trust in AI picks</div>
+    </div>
+
+    <div class="frame">
+      <div class="app-bar" style="background:#2d2d5e;">
+        <div class="step-bubble">4</div>
+        <div><div class="title">Here's your moodboard</div><div class="sub">AI selected the best-fit products and placed them in your space</div></div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:100%;background:#2d2d5e;"></div></div>
+
+      <div class="result-layout">
+        <div class="result-left">
+          <div style="font-size:11px;font-weight:700;color:#333;">Your room with new pieces</div>
+          <div class="composited-photo">
+            <div class="photo-label">✦ AI composited</div>
+            <p>Composited room photo</p>
+            <small>Side table + floor lamp placed by AI</small>
+          </div>
+          <div style="font-size:9.5px;color:#999;font-weight:600;">Placed in this photo</div>
+          <div class="placed-items">
+            <div class="placed-chip"><div class="placed-chip-img"></div>KNARREVIK Side Table<span class="swap-link">↺ Swap</span></div>
+            <div class="placed-chip"><div class="placed-chip-img"></div>Arched Floor Lamp<span class="swap-link">↺ Swap</span></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:4px;">
+            <div style="flex:1;border-radius:8px;background:#eee;height:80px;display:flex;align-items:center;justify-content:center;font-size:9px;color:#aaa;position:relative;">
+              <span style="position:absolute;top:6px;left:8px;background:rgba(0,0,0,.35);color:white;font-size:7.5px;padding:2px 7px;border-radius:20px;">Before</span>Original photo
+            </div>
+            <div style="flex:1;border-radius:8px;background:#ccc;height:80px;display:flex;align-items:center;justify-content:center;font-size:9px;color:rgba(255,255,255,.6);position:relative;">
+              <span style="position:absolute;top:6px;left:8px;background:rgba(45,45,94,.6);color:white;font-size:7.5px;padding:2px 7px;border-radius:20px;">After</span>Composited
+            </div>
+          </div>
+        </div>
+
+        <div class="result-right">
+          <div><div style="font-size:11px;font-weight:700;color:#333;">✦ AI's best picks for you</div><div style="font-size:9.5px;color:#aaa;margin-top:2px;">Chosen based on your style, budget &amp; room</div></div>
+
+          <div class="pick-card">
+            <div class="pick-card-img">Photo<div class="pick-match">98% fit</div></div>
+            <div class="pick-info">
+              <div class="pick-name">KNARREVIK Side Table</div>
+              <div class="pick-store">IKEA · Scandinavian</div>
+              <div class="pick-price">$49</div>
+              <div class="pick-why">"Slim legs match your existing wood tones"</div>
+              <div class="pick-actions"><button class="btn-swap-sm">↺ Swap</button><a class="sl-link" href="#">View →</a><div class="pick-check">✓</div></div>
+            </div>
+          </div>
+
+          <div class="pick-card">
+            <div class="pick-card-img">Photo<div class="pick-match">94% fit</div></div>
+            <div class="pick-info">
+              <div class="pick-name">Arched Floor Lamp</div>
+              <div class="pick-store">Amazon · Minimalist</div>
+              <div class="pick-price">$129</div>
+              <div class="pick-why">"Arc shape fills the empty corner behind sofa"</div>
+              <div class="pick-actions"><button class="btn-swap-sm">↺ Swap</button><a class="sl-link" href="#">View →</a><div class="pick-check">✓</div></div>
+            </div>
+          </div>
+
+          <div class="total-row">
+            <div class="total-label">Total</div>
+            <div class="total-amount">$178 <span style="font-size:10px;opacity:.55;">/ $280 budget</span></div>
+          </div>
+          <div class="action-row">
+            <button class="btn-dl">⬇ Download PDF</button>
+            <button class="btn-share">Share link</button>
+          </div>
+          <button style="width:100%;margin-top:8px;padding:10px;border-radius:8px;background:white;color:#999;font-size:10px;border:1.2px solid #e0e0e0;cursor:pointer;">↺ Start over</button>
+          <div style="background:#f6f5ff;border-radius:8px;padding:12px;">
+            <div style="font-size:9.5px;font-weight:700;color:#7b61ff;margin-bottom:6px;">PDF includes</div>
+            <div style="font-size:9px;color:#666;line-height:1.9;">✓ &nbsp;Composited room photo<br/>✓ &nbsp;Before &amp; after comparison<br/>✓ &nbsp;Product list with links &amp; prices<br/>✓ &nbsp;Total cost summary</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SUMMARY ══ -->
+  <div id="summary" style="background:#1a1a2e;border-radius:16px;padding:28px;color:white;">
+    <div style="font-size:14px;font-weight:700;margin-bottom:20px;">Overall review — what to tell the team</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;font-size:10px;line-height:2;">
+      <div>
+        <div style="font-size:10px;font-weight:700;color:#86efac;margin-bottom:10px;">✅ Keep — no changes needed</div>
+        <div style="color:#ccc;">
+          Step 1: Drop zone, thumbnail grid, tips panel<br/>
+          Step 3: Animated loading steps (all 4 existing ones)<br/>
+          Step 4: Entire layout — composited photo left, picks right<br/>
+          Step 4: Before/after toggle<br/>
+          Step 4: "Why this fits" on each product card<br/>
+          Step 4: Budget total vs cap display<br/>
+          Step 4: Swap per item<br/>
+          Step 4: Match % badge on product images<br/>
+          Step 4: PDF contents list<br/>
+          Step 2: Color mood tiles (Section C) — great pattern<br/>
+          Step 2: Budget slider with AI suggestion
+        </div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;color:#fca5a5;margin-bottom:10px;">🚨 Must change before handoff to engineers</div>
+        <div style="color:#ccc;">
+          Step 2A: Delete the open text box entirely<br/>
+          Step 2B: Replace text style tags with photo tiles<br/>
+          &nbsp;&nbsp;&nbsp;&nbsp; → 8–12 real room photos, tappable<br/>
+          &nbsp;&nbsp;&nbsp;&nbsp; → No style name labels (not "Japandi")<br/>
+          &nbsp;&nbsp;&nbsp;&nbsp; → Descriptive only: "Warm &amp; minimal"<br/>
+          Step 2: Move budget slider to top of page (before style)<br/>
+          Step 1: Add "I'm starting fresh — skip" option<br/>
+          Step 3: Add 5th loading step: "Compositing your room photo…"
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
