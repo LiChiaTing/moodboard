@@ -1,14 +1,21 @@
 import { useFlow } from '../context/FlowContext.jsx'
-import { activeVariant } from '../data/products.js'
+import { activeVariant, buyUrl } from '../data/products.js'
 import { useToast } from '../components/Toast.jsx'
+import ProductThumb from '../components/ProductThumb.jsx'
 
 export default function Save() {
-  const { photos, generatedImageUrl, plan, styles, colorMood, goTo } = useFlow()
+  const { photos, generatedImageUrl, plan, styles, colorMood, favorites, goTo } = useFlow()
   const toast = useToast()
 
   const previewImage = generatedImageUrl || photos[0]?.url || null
-  const total = plan.reduce((sum, p) => (p.owned ? sum : sum + activeVariant(p).price), 0)
   const styleLabel = styles.join(' · ') || 'Your'
+
+  // The pieces the user hearted on the Results page — their shopping list.
+  const savedItems = plan.filter((p) => favorites.has(p.id))
+  const savedTotal = savedItems.reduce(
+    (sum, p) => (p.owned ? sum : sum + activeVariant(p).price),
+    0,
+  )
 
   // ── Download as PDF — uses the browser's print-to-PDF (no dependency) ──
   const downloadPdf = () => {
@@ -78,8 +85,50 @@ export default function Save() {
                   {plan.length} items · 91% cohesion · {colorMood} palette
                 </div>
               </div>
-              <div className="s6-preview-total">${total}</div>
             </div>
+          </div>
+
+          <div className="s6-cart">
+            <div className="s6-cart-head">
+              <span className="s6-cart-title">
+                🛒 Your shopping list · {savedItems.length}{' '}
+                {savedItems.length === 1 ? 'item' : 'items'}
+              </span>
+              {savedItems.length > 0 && (
+                <span className="s6-cart-total">${savedTotal}</span>
+              )}
+            </div>
+
+            {savedItems.length === 0 ? (
+              <div className="s6-cart-empty">
+                Nothing saved yet — tap ♡ on the results page to add pieces here.
+              </div>
+            ) : (
+              <div className="s6-cart-list">
+                {savedItems.map((p) => {
+                  const v = activeVariant(p)
+                  return (
+                    <div className="s6-cart-row" key={p.id}>
+                      <ProductThumb product={p} variant={v} className="s6-cart-thumb" />
+                      <div className="s6-cart-name">{v.name}</div>
+                      <div className="s6-cart-price">
+                        {p.owned ? 'Owned' : '$' + v.price}
+                      </div>
+                      {!p.owned && (
+                        <a
+                          className="s6-cart-view"
+                          href={buyUrl(v)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          View →
+                        </a>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            )}
           </div>
 
           <button className="btn-outline" style={{ width: '100%' }} onClick={() => goTo(4)}>

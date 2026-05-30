@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useFlow } from '../context/FlowContext.jsx'
-import { activeVariant } from '../data/products.js'
+import { activeVariant, buyUrl } from '../data/products.js'
 import { useToast } from '../components/Toast.jsx'
+import ProductThumb from '../components/ProductThumb.jsx'
 
 export default function Results() {
   const {
@@ -32,12 +33,8 @@ export default function Results() {
     setTimeout(() => setSpinning(null), 350)
   }
 
-  const handleView = (name) => {
-    window.open(
-      'https://www.google.com/search?tbm=shop&q=' + encodeURIComponent(name),
-      '_blank',
-      'noopener',
-    )
+  const handleView = (variant) => {
+    window.open(buyUrl(variant), '_blank', 'noopener')
   }
 
   return (
@@ -74,18 +71,6 @@ export default function Results() {
               <span>91%</span> cohesion score ⓘ
             </div>
           </div>
-
-          {/* Marks the spot where the AI-generated image plugs in */}
-          {!generatedImageUrl && (
-            <div className="s5-ai-note">
-              <span>✦</span>
-              <div>
-                <strong>AI image goes here.</strong>{' '}
-                {roomImage ? 'Showing your uploaded photo' : 'Showing a sample room'} for
-                now — the generated "after" render drops in once the backend is connected.
-              </div>
-            </div>
-          )}
         </div>
 
         {/* RIGHT — products */}
@@ -120,9 +105,7 @@ export default function Results() {
             const fav = favorites.has(p.id)
             return (
               <div className="s5-product" key={p.id}>
-                <div className="s5-product-thumb" style={{ background: p.color }}>
-                  {p.emoji}
-                </div>
+                <ProductThumb product={p} variant={v} />
                 <div className="s5-product-body">
                   <div className="s5-product-name">{v.name}</div>
                   <div className="s5-product-why">{v.why}</div>
@@ -150,7 +133,7 @@ export default function Results() {
                         {fav ? '♥' : '♡'}
                       </button>
                       {!p.owned && (
-                        <button className="s5-buy-btn" onClick={() => handleView(v.name)}>
+                        <button className="s5-buy-btn" onClick={() => handleView(v)}>
                           View →
                         </button>
                       )}

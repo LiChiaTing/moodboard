@@ -13,19 +13,24 @@ import Save from './slides/Save.jsx'
 const isTyping = (el) =>
   el && ['INPUT', 'SELECT', 'TEXTAREA'].includes(el.tagName)
 
+// Slide 3 is the Loading screen — the system drives navigation here,
+// so all manual controls are locked until it auto-advances to Results.
+const LOADING_SLIDE = 3
+
 export default function App() {
   const { current, goTo, navigate } = useFlow()
+  const locked = current === LOADING_SLIDE
 
-  // Keyboard navigation (ignored while typing in a field)
+  // Keyboard navigation (ignored while typing in a field, or while locked)
   useEffect(() => {
     const onKey = (e) => {
-      if (isTyping(e.target)) return
+      if (isTyping(e.target) || locked) return
       if (e.key === 'ArrowRight') navigate(1)
       if (e.key === 'ArrowLeft') navigate(-1)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [navigate])
+  }, [navigate, locked])
 
   return (
     <ToastProvider>
@@ -56,7 +61,7 @@ export default function App() {
       <button
         className="nav-btn prev"
         onClick={() => navigate(-1)}
-        disabled={current === 0}
+        disabled={current === 0 || locked}
         aria-label="Previous"
       >
         ←
@@ -64,7 +69,7 @@ export default function App() {
       <button
         className="nav-btn next"
         onClick={() => navigate(1)}
-        disabled={current === TOTAL_SLIDES - 1}
+        disabled={current === TOTAL_SLIDES - 1 || locked}
         aria-label="Next"
       >
         →
@@ -74,8 +79,9 @@ export default function App() {
         {Array.from({ length: TOTAL_SLIDES }).map((_, i) => (
           <button
             key={i}
-            className={'dot' + (i === current ? ' active' : '')}
+            className={'dot' + (i === current ? ' active' : '') + (locked ? ' locked' : '')}
             onClick={() => goTo(i)}
+            disabled={locked}
             aria-label={`Go to slide ${i + 1}`}
           />
         ))}

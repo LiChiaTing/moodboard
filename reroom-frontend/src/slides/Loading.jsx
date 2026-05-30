@@ -60,7 +60,7 @@ export default function Loading() {
 
         <div>
           <div className="s4-headline">Working on your room…</div>
-          <div className="s4-sub">Finding real pieces that match your style &amp; budget.</div>
+          <div className="s4-sub">Hang tight — we&rsquo;ll take you to your results automatically. No need to click anything. ✨</div>
         </div>
 
         <div className="s4-steps">
