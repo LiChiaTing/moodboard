@@ -1,9 +1,9 @@
 {
-  "name": "reroom-frontend",
+  "name": "moodboard",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "AI Room Transformer — frontend (React + Vite). Upload a room photo, set budget & style, get a shoppable room plan.",
+  "description": "Moodboard — turn a room photo into a budget-aware, shoppable interior design plan. Frontend (React + Vite).",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
