@@ -21,7 +21,7 @@ reroom-frontend.local-backup/
 .specstory/
 
 # Personal / local-only files (kept on this machine, not in the public repo)
-/CASE_STUDY_DRAFT.md
+/CASE_STUDY_DRAFT*.md
 /roombefore.jpg
 
 # Local cleanup staging — review then delete by hand (never committed)
