@@ -19,3 +19,7 @@ reroom-frontend.local-backup/
 /room[0-9].jpg
 reroom-frontend.local-backup/
 .specstory/
+
+# Personal / local-only files (kept on this machine, not in the public repo)
+/CASE_STUDY_DRAFT.md
+/roombefore.jpg
