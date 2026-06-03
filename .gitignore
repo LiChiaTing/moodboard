@@ -20,8 +20,11 @@ reroom-frontend.local-backup/
 reroom-frontend.local-backup/
 .specstory/
 
+# Case study drafts — ALWAYS kept local (repo is public). The published case study
+# lives on the portfolio site, not here. Matches CASE_STUDY* in any folder.
+CASE_STUDY*
+
 # Personal / local-only files (kept on this machine, not in the public repo)
-/CASE_STUDY_DRAFT*.md
 /roombefore.jpg
 
 # Local cleanup staging — review then delete by hand (never committed)

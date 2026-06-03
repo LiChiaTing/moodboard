@@ -29,6 +29,12 @@ The design work, from system to screens.
 - `decision-log.md` — key design decisions and the reasoning behind them
   (also the raw material for case studies)
 
+## 04-casestudy
+
+- The Moodboard case study (problem → research → design → decisions → outcome).
+- Drafts (`CASE_STUDY*`) are kept local / gitignored; the polished version is
+  published on the portfolio site. See the folder's `README.md`.
+
 ## File formats
 
 - `.html` — the living, editable working version (open in a browser)
