@@ -2024,6 +2024,9 @@ button { font-family: inherit; }
   /* Progress-bar step labels don't fit — keep just the numbered dots */
   .pb-step-label { display: none; }
   .pb-connector { width: 16px; margin: 0 6px; }
+
+  /* Soften the decorative blobs so the stacked text stays readable over them */
+  .slide > .blob { opacity: 0.5; }
 }
 
 @media (max-width: 600px) {
@@ -2035,4 +2038,8 @@ button { font-family: inherit; }
   .s1-stat { padding: 13px 12px; }
   .s3-color-moods { grid-template-columns: repeat(2, 1fr); }
   .s5-product-panel { padding: 22px 16px 96px; }
+
+  /* The bottom dots already convey progress here, and the top step-bar would
+     collide with the logo on a narrow screen — so hide the top bar on phones. */
+  .progress-bar { display: none; }
 }
