@@ -12,6 +12,13 @@ export default function Save() {
   const previewImage = generatedImageUrl || '/room-after.png'
   const styleLabel = styles.join(' · ') || 'Your'
 
+  // Total cost of the plan (skip pieces you already own) — a real figure,
+  // not a hardcoded score.
+  const planTotal = plan.reduce(
+    (sum, p) => (p.owned ? sum : sum + activeVariant(p).price),
+    0,
+  )
+
   // The pieces the user hearted on the Results page — their shopping list.
   const savedItems = plan.filter((p) => favorites.has(p.id))
   const savedTotal = savedItems.reduce(
@@ -83,7 +90,7 @@ export default function Save() {
               <div>
                 <div className="s6-preview-title">{styleLabel} Living Room</div>
                 <div className="s6-preview-subtitle">
-                  {plan.length} items · 91% cohesion · {colorMood} palette
+                  {plan.length} items · ${planTotal} total · {colorMood} palette
                 </div>
               </div>
             </div>

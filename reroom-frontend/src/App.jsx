@@ -1,8 +1,9 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useFlow, TOTAL_SLIDES } from './context/FlowContext.jsx'
 import { ToastProvider } from './components/Toast.jsx'
 import ProgressBar from './components/ProgressBar.jsx'
 import Logo from './components/Logo.jsx'
+import AboutOverlay from './components/AboutOverlay.jsx'
 import Hero from './slides/Hero.jsx'
 import Upload from './slides/Upload.jsx'
 import BudgetStyle from './slides/BudgetStyle.jsx'
@@ -20,17 +21,18 @@ const LOADING_SLIDE = 3
 export default function App() {
   const { current, goTo, navigate } = useFlow()
   const locked = current === LOADING_SLIDE
+  const [aboutOpen, setAboutOpen] = useState(false)
 
   // Keyboard navigation (ignored while typing in a field, or while locked)
   useEffect(() => {
     const onKey = (e) => {
-      if (isTyping(e.target) || locked) return
+      if (isTyping(e.target) || locked || aboutOpen) return
       if (e.key === 'ArrowRight') navigate(1)
       if (e.key === 'ArrowLeft') navigate(-1)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [navigate, locked])
+  }, [navigate, locked, aboutOpen])
 
   return (
     <ToastProvider>
@@ -41,6 +43,17 @@ export default function App() {
       >
         <Logo />
       </button>
+
+      <button
+        className="about-btn"
+        onClick={() => setAboutOpen(true)}
+        aria-label="About this project"
+      >
+        <span className="about-btn-i" aria-hidden="true">ⓘ</span>
+        <span className="about-btn-text">About this project</span>
+      </button>
+
+      <AboutOverlay open={aboutOpen} onClose={() => setAboutOpen(false)} />
 
       <ProgressBar />
 

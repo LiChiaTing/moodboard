@@ -1,4 +1,5 @@
 import { useFlow } from '../context/FlowContext.jsx'
+import BeforeAfter from '../components/BeforeAfter.jsx'
 
 export default function Hero() {
   const { goTo } = useFlow()
@@ -25,20 +26,10 @@ export default function Hero() {
             <button className="btn-dark" onClick={() => goTo(1)}>
               Transform my room →
             </button>
-            <button className="btn-outline" onClick={() => goTo(1)}>
-              See how it works
-            </button>
           </div>
 
           <div className="s1-proof">
-            <div className="s1-avatars">
-              <div className="s1-av" style={{ background: 'var(--coral)' }} />
-              <div className="s1-av" style={{ background: 'var(--blue)' }} />
-              <div className="s1-av" style={{ background: 'var(--green)' }} />
-              <div className="s1-av" style={{ background: 'var(--yellow)' }} />
-            </div>
             <div className="s1-proof-text">
-              <strong>2,400+ rooms transformed</strong> this week<br />
               No account needed · free to try
             </div>
           </div>
@@ -46,33 +37,21 @@ export default function Hero() {
 
         <div className="s1-right">
           <div className="s1-ba-wrap">
-            <div className="s1-ba-panel s1-ba-before">
-              <div className="ba-floor" />
-              <div className="ba-sofa" />
-              <div className="s1-ba-label-pill">Before</div>
-            </div>
-            <div className="s1-ba-panel s1-ba-after">
-              <div className="ba-floor2" />
-              <div className="ba-rug2" />
-              <div className="ba-sofa2" />
-              <div className="ba-plant2" />
-              <div className="ba-lamp2" />
-              <div className="s1-ba-label-pill">After</div>
-            </div>
+            <BeforeAfter before="/room-before.jpg" after="/room-after.png" auto />
           </div>
 
           <div className="s1-stat-row">
             <div className="s1-stat">
-              <div className="s1-stat-num">91%</div>
-              <div className="s1-stat-label">cohesion score</div>
-            </div>
-            <div className="s1-stat">
-              <div className="s1-stat-num">$252</div>
+              <div className="s1-stat-num">$255</div>
               <div className="s1-stat-label">spent of $350 budget</div>
             </div>
             <div className="s1-stat">
               <div className="s1-stat-num">8</div>
-              <div className="s1-stat-label">matched products</div>
+              <div className="s1-stat-label">pieces matched</div>
+            </div>
+            <div className="s1-stat">
+              <div className="s1-stat-num">2</div>
+              <div className="s1-stat-label">pieces you own, kept</div>
             </div>
           </div>
         </div>

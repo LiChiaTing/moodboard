@@ -53,10 +53,14 @@ export default function Results() {
           <BeforeAfter before={beforeImage} after={afterImage}>
             <div className="s5-photo-overlay">
               <div
-                className="s5-cohesion-badge"
-                title="Cohesion score: how well these pieces work together as one look — colour harmony, style match and scale."
+                className={'s5-cohesion-badge' + (over ? ' over' : '')}
+                title="How your plan tracks against the budget you set — updates live as you swap pieces."
               >
-                <span>91%</span> cohesion score ⓘ
+                {over ? (
+                  <><span>${spent - budget}</span> over budget</>
+                ) : (
+                  <><span>${budget - spent}</span> under budget</>
+                )}
               </div>
             </div>
           </BeforeAfter>
